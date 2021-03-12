@@ -1,0 +1,73 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <PreferenceCategory app:title="@string/general_header">-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="sound"-->
+<!--            app:defaultValue="true"-->
+<!--            app:summaryOff="Sound is off"-->
+<!--            app:summaryOn="Sound is on"-->
+<!--            app:title="Sound" />-->
+
+
+<!--        <SwitchPreferenceCompat-->
+<!--            app:dependency="sound"-->
+<!--            app:key="sheep_mode"-->
+<!--            app:defaultValue="false"-->
+<!--            app:summaryOff="Sheep mode is off"-->
+<!--            app:summaryOn="Sheep mode is on"-->
+<!--            app:title="Sheep Mode" />-->
+
+<!--        <SeekBarPreference-->
+<!--            android:max="15000"-->
+<!--            app:defaultValue="5000"-->
+<!--            app:key="montecarlo_trials"-->
+<!--            app:min="500"-->
+<!--            app:showSeekBarValue="true"-->
+<!--            app:summary="@string/autohold_description"-->
+<!--            app:title="Autohold Accuracy" />-->
+
+<!--        <SeekBarPreference-->
+<!--            android:max="20"-->
+<!--            app:defaultValue="10"-->
+<!--            app:key="training_strictness"-->
+<!--            app:min="0"-->
+<!--            app:showSeekBarValue="true"-->
+<!--            app:summary="@string/training_strict_description"-->
+<!--            app:title="Training Strictness" />-->
+
+<!--        <Preference-->
+<!--            android:title="Share Stats"-->
+<!--            android:key="share_stats"-->
+<!--            android:summary="Share your statistics"-->
+<!--            />-->
+
+<!--        <Preference-->
+<!--            android:title="Reset Stats"-->
+<!--            android:key="reset_stats"-->
+<!--            android:summary="Resets your statistics"-->
+<!--            />-->
+
+<!--    </PreferenceCategory>-->
+
+    <PreferenceCategory app:title="@string/money_header">
+
+<!--        <Preference-->
+<!--            android:title="Reset Money"-->
+<!--            android:key="reset_money"-->
+<!--            android:summary="Resets your money to the default (4000)"-->
+<!--            />-->
+
+        <ListPreference
+            app:defaultValue="9/6 – 99.54%"
+            app:entries="@array/payout_table_type_entries"
+            app:entryValues="@array/payout_table_type_entries"
+            app:key="payout_table"
+            app:title="@string/payout_table_title"
+            app:useSimpleSummaryProvider="true" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

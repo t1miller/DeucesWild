@@ -45,11 +45,16 @@ class MainActivity : AppCompatActivity() {
 //            if (isSettingsVisible() || isSimulatorVisible() || isStatsVisible()){
 //                loadMainFragment()
 //            }
+            loadMainFragment()
             true
         }
 
         else -> {
             super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun loadMainFragment() {
+        supportFragmentManager.beginTransaction().replace(R.id.container, MainFragment(), MainFragment.NAME).commitNow()
     }
 }

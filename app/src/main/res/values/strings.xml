@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Deuces Wild</string>
 
-    <!--    Hands  -->
+<!--    Hands  -->
     <string name="sequential_royal_flush">Sequential Royal Flush</string>
     <string name="natural_royal_flush">Natural Royal Flush</string>
     <string name="four_deuces">Four Deuces</string>
@@ -14,8 +14,14 @@
     <string name="straight">Straight</string>
     <string name="three_of_a_kind">Three of a Kind</string>
 
-    <!--  Settings  -->
+<!--  Settings  -->
     <string name="settings">Settings</string>
     <string name="money_header">Money</string>
     <string name="payout_table_title">Payout Table</string>
+
+<!--    Buttons -->
+    <string name="deal_button">Deal</string>
+    <string name="double_button">Double</string>
+    <string name="bet_one_button">Bet 1</string>
+    <string name="bet_max_button">Bet Max</string>
 </resources>

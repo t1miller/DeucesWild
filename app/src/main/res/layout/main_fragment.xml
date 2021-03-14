@@ -1,556 +1,432 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/main_background_gradient"
     tools:context=".ui.main.MainFragment">
 
-    <TableLayout
-        android:padding="5dp"
-        android:layout_margin="10dp"
-        android:id="@+id/payoutTable"
-        android:background="@drawable/table_background"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipChildren="false"
+        android:background="@drawable/table_background"
+        android:padding="10dp"
+        android:layout_margin="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TableRow
+        <TextView
+            style="@style/TopTitleText"
+            android:id="@+id/totalText"
+            android:text="Credits: 10000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TopTitleText"
+            android:id="@+id/betText"
+            android:text="Bet: 5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            app:layout_constraintStart_toEndOf="@id/totalText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TopTitleText"
+            android:id="@+id/wonLossText"
+            android:text="Won: 60000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            app:layout_constraintStart_toEndOf="@id/betText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/strategyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/table_background"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="10dp"
+        android:padding="7dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/hand"
+        app:layout_constraintTop_toBottomOf="@id/topText">
+
+        <TextView
+            style="@style/TopTitleText"
+            android:id="@+id/strategyTitle"
+            android:text="Strategy 0 deuces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="150dp"
+            app:layout_constraintTop_toBottomOf="@id/strategyTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+        />
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sequential_royal_flush"
-                android:layout_column="1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
 
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
+    <TableLayout
+        android:padding="7dp"
+        android:layout_margin="5dp"
+        android:id="@+id/payoutTable"
+        android:background="@drawable/table_background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topText"
+        app:layout_constraintBottom_toTopOf="@id/hand">
 
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-        </TableRow>
-        <TableRow
+        <include android:id="@+id/row1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/natural_royal_flush"
-                android:layout_column="1" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="@string/four_deuces" />
 
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"
-                />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row3"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="@string/wild_royal_flush" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row4"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="@string/five_of_a_kind" />
-
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row5"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/straight_flush"
-                android:layout_column="1" />
-
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row6"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="@string/four_of_a_kind" />
-
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row7"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/full_house"
-                android:layout_column="1" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row8"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:text="@string/flush"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1" />
-
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row9"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="@string/straight" />
-
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-        </TableRow>
-
-        <TableRow
+        <include android:id="@+id/row10"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
-            <TextView
-                style="@style/TableRowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:text="@string/three_of_a_kind" />
-
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end" />
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-
-            <TextView
-                style="@style/TableRowTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="end"/>
-        </TableRow>
+        <include android:id="@+id/row11"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/table_row"/>
 
     </TableLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/hand"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttons"
+        app:layout_constraintTop_toBottomOf="@id/payoutTable">
+
+        <com.wajahatkarim3.easyflipview.EasyFlipView
+            android:id="@+id/card1layout"
+            android:tag="flip1"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:flipOnTouch="false"
+            app:flipEnabled="true"
+            app:flipDuration="250"
+            app:flipType="horizontal"
+            app:flipFrom="front">
+
+            <!-- Back Layout Goes Here -->
+            <include layout="@layout/card_layout_back"/>
+
+            <!-- Front Layout Goes Here -->
+            <include layout="@layout/card_layout_front"/>
+
+        </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+        <TextView
+            style="@style/HoldTextView"
+            android:id="@+id/card1Hold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/card1layout"
+            app:layout_constraintTop_toTopOf="@id/card1layout"
+            app:layout_constraintEnd_toEndOf="@+id/card1layout" />
+
+        <com.wajahatkarim3.easyflipview.EasyFlipView
+            android:id="@+id/card2layout"
+            android:tag="flip2"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toEndOf="@id/card1layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:flipOnTouch="false"
+            app:flipEnabled="true"
+            app:flipDuration="250"
+            app:flipType="horizontal"
+            app:flipFrom="front"
+            >
+
+            <!-- Back Layout Goes Here -->
+            <include layout="@layout/card_layout_back"/>
+
+            <!-- Front Layout Goes Here -->
+            <include layout="@layout/card_layout_front_two"/>
+
+        </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+
+        <TextView
+            style="@style/HoldTextView"
+            android:id="@+id/card2Hold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/card2layout"
+            app:layout_constraintTop_toTopOf="@id/card2layout"
+            app:layout_constraintEnd_toEndOf="@+id/card2layout" />
+
+        <com.wajahatkarim3.easyflipview.EasyFlipView
+            android:id="@+id/card3layout"
+            android:tag="flip3"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toEndOf="@id/card2layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:flipOnTouch="false"
+            app:flipEnabled="true"
+            app:flipDuration="250"
+            app:flipType="horizontal"
+            app:flipFrom="front"
+            >
+
+            <!-- Back Layout Goes Here -->
+            <include layout="@layout/card_layout_back"/>
+
+            <!-- Front Layout Goes Here -->
+            <include layout="@layout/card_layout_front_three"/>
+
+        </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+        <TextView
+            style="@style/HoldTextView"
+            android:id="@+id/card3Hold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/card3layout"
+            app:layout_constraintTop_toTopOf="@id/card3layout"
+            app:layout_constraintEnd_toEndOf="@+id/card3layout" />
+
+        <com.wajahatkarim3.easyflipview.EasyFlipView
+            android:id="@+id/card4layout"
+            android:tag="flip4"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toEndOf="@id/card3layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:flipOnTouch="false"
+            app:flipEnabled="true"
+            app:flipDuration="250"
+            app:flipType="horizontal"
+            app:flipFrom="front"
+            >
+
+            <!-- Back Layout Goes Here -->
+            <include layout="@layout/card_layout_back"/>
+
+            <!-- Front Layout Goes Here -->
+            <include layout="@layout/card_layout_front_four"/>
+
+        </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+        <TextView
+            style="@style/HoldTextView"
+            android:id="@+id/card4Hold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/card4layout"
+            app:layout_constraintTop_toTopOf="@id/card4layout"
+            app:layout_constraintEnd_toEndOf="@+id/card4layout" />
+
+        <com.wajahatkarim3.easyflipview.EasyFlipView
+            android:id="@+id/card5layout"
+            android:tag="flip5"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toEndOf="@id/card4layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:flipOnTouch="false"
+            app:flipEnabled="true"
+            app:flipDuration="250"
+            app:flipType="horizontal"
+            app:flipFrom="front"
+            >
+
+            <!-- Back Layout Goes Here -->
+            <include layout="@layout/card_layout_back"/>
+
+            <!-- Front Layout Goes Here -->
+            <include layout="@layout/card_layout_front_five"/>
+
+        </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+        <TextView
+            style="@style/HoldTextView"
+            android:id="@+id/card5Hold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/card5layout"
+            app:layout_constraintTop_toTopOf="@id/card5layout"
+            app:layout_constraintEnd_toEndOf="@+id/card5layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons"
+        android:layout_margin="10dp"
+        android:layout_marginEnd="20dp"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/table_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hand">
+
+        <Button
+            android:id="@+id/betone"
+            style="@style/ButtonYellow"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bet_one_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/betmax"
+            style="@style/ButtonYellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/bet_max_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/Deal"
+            app:layout_constraintStart_toEndOf="@id/betone"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/Deal"
+            style="@style/ButtonYellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/deal_button"
+            app:layout_constraintStart_toEndOf="@id/betmax"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/checkboxLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/buttons"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/showTip"
+            style="@style/TextWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:text="show tip" />
+
+
+<!--        <CheckBox-->
+<!--            android:id="@+id/showStats"-->
+<!--            style="@style/TextWhite"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="@string/hand_stats"/>-->
+
+<!--        <CheckBox-->
+<!--            android:id="@+id/trainingMode"-->
+<!--            style="@style/TextWhite"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:text="@string/training"/>-->
+    </LinearLayout>
+
+
+    <TextView
+        android:visibility="invisible"
+        style="@style/TopTitleText"
+        android:id="@+id/winningHandText"
+        android:text="@string/natural_royal_flush"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="60dp"
+        android:paddingEnd="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/winninng_gradient"
+        app:layout_constraintBottom_toBottomOf="@id/hand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/hand" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

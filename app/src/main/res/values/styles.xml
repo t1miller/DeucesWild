@@ -13,8 +13,9 @@
         <item name="android:textColor">@color/colorYellow</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingStart">1dp</item>
         <item name="android:paddingEnd">3dp</item>
+<!--        <item name="android:layout_marginEnd">3dp</item>-->
         <item name="android:width">49dp</item>
         <item name="android:gravity">right</item>
     </style>
@@ -76,6 +77,18 @@
         <item name="android:background">@drawable/rounded_corner_red_view</item>
     </style>
 
+    <style name="TopTitleText" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="WinningText" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/colorLightLightYellow</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="TextWhite" parent="@android:style/Widget.TextView">
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textStyle">bold</item>
@@ -84,7 +97,7 @@
 
     <style name="TextWhiteSmall" parent="@android:style/Widget.TextView">
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="TextRed" parent="@android:style/Widget.TextView">

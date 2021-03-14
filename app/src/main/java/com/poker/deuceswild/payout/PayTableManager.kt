@@ -158,16 +158,16 @@ object PayTableManager {
         return payTableLookup[payTableType]?.get(eval)?.get(bet-1) ?: 0
     }
 
-    fun getPayTable(payTableType: PayTableType) : Map<Evaluate.Hand, List<Int>>?{
-        return payTableLookup[payTableType]
-    }
+//    fun getPayTable(payTableType: PayTableType) : Map<Evaluate.Hand, List<Int>>?{
+//        return payTableLookup[payTableType]
+//    }
 
-    fun getPayTableRow(payTableType: PayTableType, eval: Evaluate.Hand) : List<Int> {
+    private fun getPayTableRow(payTableType: PayTableType, eval: Evaluate.Hand) : List<Int> {
         return payTableLookup[payTableType]?.get(eval) ?: listOf(0,0,0,0,0)
     }
 
     fun getPayTableRow(payTableType: PayTableType, index: Int) : List<Int> {
         val hand = Evaluate.Hand.values()[index]
-        return payTableLookup[payTableType]?.get(hand) ?: listOf(0,0,0,0,0)
+        return getPayTableRow(payTableType, hand)
     }
 }

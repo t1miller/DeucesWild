@@ -2,8 +2,7 @@ package com.poker.deuceswild.cardgame
 
 import java.util.*
 
-class Card(var face: Int, var suit: Char) {
-
+class Card(var rank: Int, var suit: Char) {
 
     enum class ParseError(val humanReadableError: String) {
         NOT_5_CARDS("Need a 5 card hand"),
@@ -15,7 +14,7 @@ class Card(var face: Int, var suit: Char) {
     }
 
     companion object {
-        const val FACES = "23456789tjqka"
+        const val RANK = "23456789tjqka"
         const val SUITS = "shdc"
 
         fun parseHand(hand: String) : Pair<List<Card>, ParseError>{
@@ -32,13 +31,13 @@ class Card(var face: Int, var suit: Char) {
                 }
                 val rank = txt[0]
                 val suit = txt[1]
-                if(rank !in FACES) {
+                if(rank !in RANK) {
                     return Pair(emptyList(), ParseError.RANK_WRONG)
                 }
                 if(suit !in SUITS) {
                     return Pair(emptyList(), ParseError.SUIT_WRONG)
                 }
-                Card(FACES.indexOf(rank) + 2, suit)
+                Card(RANK.indexOf(rank) + 2, suit)
             }
 
             val isUniqueCards = handParsed.toSet().toList().size == 5
@@ -53,17 +52,17 @@ class Card(var face: Int, var suit: Char) {
 
     @Override
     override fun toString(): String {
-        return "${FACES.toCharArray()[face-2]}${suit}"
+        return "${RANK.toCharArray()[rank-2]}${suit}"
     }
 
     @Override
     override fun equals(other: Any?): Boolean =
         (other is Card) &&
-                face == other.face &&
+                rank == other.rank &&
                 suit == other.suit
 
     override fun hashCode(): Int {
-        var result = face
+        var result = rank
         result = 31 * result + suit.hashCode()
         return result
     }

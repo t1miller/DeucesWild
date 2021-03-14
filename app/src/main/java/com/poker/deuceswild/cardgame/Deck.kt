@@ -12,10 +12,10 @@ object Deck {
     fun newDeck() {
         cards.clear()
         for (suit in Card.SUITS) {
-            for (face in Card.FACES){
+            for (face in Card.RANK){
                 cards.add(
                     Card(
-                        Card.FACES.indexOf(face) + 2,
+                        Card.RANK.indexOf(face) + 2,
                         suit
                     )
                 )

@@ -3,6 +3,7 @@ package com.poker.deuceswild.settings
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.poker.deuceswild.payout.PayTableType
 
 object SettingsUtils {
 
@@ -84,18 +85,22 @@ object SettingsUtils {
         return preferences.getInt(Keys.TOTAL_MONEY, Defaults.MONEY)
     }
 
-//    fun getPayoutTable(context: Context?) : PayOutHelper.PAY_TABLE_TYPES{
-//        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//
-//        return when(preferences.getString(Keys.PAYOUT_TABLE, Defaults.PAYOUT_TABLE)){
-//            "6/5 – 95.12%" -> PayOutHelper.PAY_TABLE_TYPES._6_5_95
-//            "7/5 – 96.17%" -> PayOutHelper.PAY_TABLE_TYPES._7_5_96
-//            "8/5 – 97.25%" -> PayOutHelper.PAY_TABLE_TYPES._8_5_97
-//            "9/5 – 98.33%" -> PayOutHelper.PAY_TABLE_TYPES._9_5_98
-//            "9/6 – 99.54%" -> PayOutHelper.PAY_TABLE_TYPES._9_6_99
-//            else -> {
-//                PayOutHelper.PAY_TABLE_TYPES._9_6_99
-//            }
-//        }
-//    }
+    fun getPayoutTable(context: Context?) : PayTableType{
+        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return when(preferences.getString(Keys.PAYOUT_TABLE, Defaults.PAYOUT_TABLE)){
+            "101.28% Sequential Royal Flush" -> PayTableType._101_28
+            "100.76% Full Pay" -> PayTableType._100_76
+            "100.36% 1-2-2-3-5-8-15-25-200-800" -> PayTableType._100_36
+            "99.89% 1-2-2-3-5-9-15-20-200-800" -> PayTableType._99_89
+            "99.81% 1-2-2-3-5-9-12-25-200-800" -> PayTableType._99_81
+            "98.94% 1-2-2-3-5-9-12-20-200-800" -> PayTableType._98_94
+            "96.77% Colorado Deuces" -> PayTableType._96_77
+            "94.82% 1-2-2-3-4-10-15-25-200-800" -> PayTableType._94_82
+            "94.34% 1-2-2-3-4-9-15-25-200-800" -> PayTableType._94_34
+            "92.05% 1-2-2-3-4-8-12-20-200-800" -> PayTableType._92_05
+            else -> {
+                PayTableType._100_76
+            }
+        }
+    }
 }

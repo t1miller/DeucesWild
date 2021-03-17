@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.google.android.gms.ads.MobileAds
+import com.poker.deuceswild.log.LogManager
 import com.poker.deuceswild.settings.SettingsFragment
 import com.poker.deuceswild.ui.main.MainFragment
 
@@ -12,12 +14,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.main_activity)
+        MobileAds.initialize(this) {}
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, MainFragment.newInstance())
                     .commitNow()
         }
+    }
+
+    override fun onStart() {
+        // save pending statistics (won, loss, etc) to disk
+        LogManager.readStatisticsFromDisk()
+        super.onStart()
+    }
+    override fun onPause() {
+        // save pending statistics (won, loss, etc) to disk
+        LogManager.writeStatisticsToDisk()
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

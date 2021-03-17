@@ -36,24 +36,23 @@ object SoundManager {
 
     fun load(context: Context) {
         soundPool = SoundPool.Builder().build()
-//        soundTypeToId[SoundType.SHUFFLE] = soundPool?.load(context, R.raw.shuffling,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.SHUFFLE_SHEEP] = soundPool?.load(context, R.raw.shuffle_sheep,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.SHUFFLE] = soundPool?.load(context, R.raw.shuffling,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.SHUFFLE_SHEEP] = soundPool?.load(context, R.raw.shuffle_sheep,1) ?: DEFAULT_ID
         soundTypeToId[SoundType.FLIP] = soundPool?.load(context, R.raw.card_flip,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.INSERT_COIN] = soundPool?.load(context, R.raw.insert_coin,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.INSERT_COIN_SHEEP] = soundPool?.load(context, R.raw.increase_bet_sheep,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.COLLECTING_COINS] = soundPool?.load(context, R.raw.collecting_coins,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.COLLECTING_COINS_SHEEP] = soundPool?.load(context, R.raw.collect_coins_sheep,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.BIG_WIN] = soundPool?.load(context, R.raw.big_win,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.BIG_WIN_SHEEP] = soundPool?.load(context, R.raw.big_win_sheep,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.MEDIUM_WIN] = soundPool?.load(context, R.raw.medium_win,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.MEDIUM_WIN_SHEEP] = soundPool?.load(context, R.raw.medium_win_sheep,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.CHIME] = soundPool?.load(context, R.raw.chime,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.SAD_TROMBONE_3_WOMP] = soundPool?.load(context, R.raw.sad_trombone_3_womps,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.SAD_TROMBONE_4_WOMP] = soundPool?.load(context, R.raw.sad_trombone_4_womps_type2,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.CHICKEN_DINNER] = soundPool?.load(context, R.raw.chicken_dinner,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.CHICKEN_SHUFFLING] = soundPool?.load(context, R.raw.chicken_shuffling,1) ?: DEFAULT_ID
-//        soundTypeToId[SoundType.ROOSTER_CROWING] = soundPool?.load(context, R.raw.rooster_crowing,1) ?: DEFAULT_ID
-
+        soundTypeToId[SoundType.INSERT_COIN] = soundPool?.load(context, R.raw.insert_coin,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.INSERT_COIN_SHEEP] = soundPool?.load(context, R.raw.increase_bet_sheep,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.COLLECTING_COINS] = soundPool?.load(context, R.raw.collecting_coins,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.COLLECTING_COINS_SHEEP] = soundPool?.load(context, R.raw.collect_coins_sheep,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.BIG_WIN] = soundPool?.load(context, R.raw.big_win,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.BIG_WIN_SHEEP] = soundPool?.load(context, R.raw.big_win_sheep,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.MEDIUM_WIN] = soundPool?.load(context, R.raw.medium_win,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.MEDIUM_WIN_SHEEP] = soundPool?.load(context, R.raw.medium_win_sheep,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.CHIME] = soundPool?.load(context, R.raw.chime,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.SAD_TROMBONE_3_WOMP] = soundPool?.load(context, R.raw.sad_trombone_3_womps,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.SAD_TROMBONE_4_WOMP] = soundPool?.load(context, R.raw.sad_trombone_4_womps_type2,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.CHICKEN_DINNER] = soundPool?.load(context, R.raw.chicken_dinner,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.CHICKEN_SHUFFLING] = soundPool?.load(context, R.raw.chicken_shuffling,1) ?: DEFAULT_ID
+        soundTypeToId[SoundType.ROOSTER_CROWING] = soundPool?.load(context, R.raw.rooster_crowing,1) ?: DEFAULT_ID
     }
 
     fun release() {
@@ -83,10 +82,10 @@ object SoundManager {
             soundPool?.play(soundId, 1F, 1F, 0, 0, 1F)
         }
     }
-//
+
 //    fun playSound(context: Context, eval: Evaluate.Hand) {
 //        when(eval) {
-//            Evaluate.Hand.ROYAL_FLUSH,
+//            Evaluate.Hand.NATURAL_ROYAL_FLUSH,
 //            Evaluate.Hand.STRAIGHT_FLUSH,
 //            Evaluate.Hand.FOUR_OF_A_KIND,
 //            Evaluate.Hand.FULL_HOUSE,

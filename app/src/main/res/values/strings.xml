@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Deuces Wild</string>
 
-<!--    Hands  -->
+    <!--    Hands  -->
     <string name="sequential_royal_flush">Sequential Royal Flush</string>
     <string name="natural_royal_flush">Natural Royal Flush</string>
     <string name="four_deuces">Four Deuces</string>
@@ -14,14 +14,47 @@
     <string name="straight">Straight</string>
     <string name="three_of_a_kind">Three of a Kind</string>
 
-<!--  Settings  -->
+    <!--  Settings  -->
     <string name="settings">Settings</string>
     <string name="money_header">Money</string>
+    <string name="general_header">General</string>
+    <string name="training_strict_description">Increases strictness</string>
     <string name="payout_table_title">Payout Table</string>
+    <string name="autohold_description">Autohold accuracy</string>
 
-<!--    Buttons -->
+    <!--    Buttons -->
     <string name="deal_button">Deal</string>
     <string name="double_button">Double</string>
     <string name="bet_one_button">Bet 1</string>
     <string name="bet_max_button">Bet Max</string>
+    <string name="red_button">Red</string>
+    <string name="black_button">Black</string>
+    <string name="collect_button">Collect</string>
+
+    <string name="autohold">autohold</string>
+    <string name="training">training</string>
+    <string name="show_tips">tips</string>
+    <string name="stats">stats</string>
+
+    <!--    -->
+    <string name="tap_card">Tap card to hold</string>
+    <string name="correct">Correct</string>
+    <string name="correct_training">Correct: %d</string>
+    <string name="wrong">Wrong</string>
+    <string name="wrong_training">Wrong: %d</string>
+    <string name="hold">Hold</string>
+    <string name="accuracy">Accuracy: %.2f</string>
+    <string name="winnings">Winnings: %d</string>
+    <string name="optimal">Optimal: %d</string>
+
+    <!--   Bonus round stuff   -->
+    <string name="bonus_correct_guess">Chicken Dinner!</string>
+    <string name="bonus_wrong_guess">Wrong Guess!</string>
+    <string name="guess_the_color">Guess the color?</string>
+
+    <string name="bet">Bet: $%d</string>
+    <string name="won">Won: $%d</string>
+    <string name="loss">Lost: $%d</string>
+    <string name="total">Credits: $%d</string>
+    <string name="expected_value">$%.3f</string>
 </resources>

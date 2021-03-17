@@ -56,7 +56,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/table_background"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:padding="7dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +87,221 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/trainingView"
+        android:layout_width="180dp"
+        android:layout_height="190dp"
+        android:background="@drawable/table_background"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="7dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/hand"
+        app:layout_constraintTop_toBottomOf="@id/topText">
+
+        <TextView
+            style="@style/TopTitleText"
+            android:id="@+id/trainingText"
+            android:text="Training Mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            style="@style/TextWhiteSmall"
+            android:id="@+id/correctCountText"
+            android:text="Correct: 10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingText" />
+
+        <TextView
+            style="@style/TextWhiteSmall"
+            android:id="@+id/wrongCountText"
+            android:text="Wrong: 10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/correctCountText" />
+
+        <TextView
+            style="@style/TextWhiteSmall"
+            android:id="@+id/accuracyText"
+            android:text="Accuracy: 89%"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wrongCountText" />
+
+        <TextView
+            style="@style/TextWhiteSmall"
+            android:id="@+id/trainingWinningText"
+            android:text="Winnings: $10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accuracyText" />
+
+        <TextView
+            style="@style/TextWhiteSmall"
+            android:id="@+id/trainingOptimalText"
+            android:text="Optimal: $10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingWinningText" />
+
+        <TextView
+            android:id="@+id/trainingcorrect"
+            style="@style/TextRedGreen"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/correct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingOptimalText" />
+
+        <TextView
+            android:id="@+id/trainingWrong"
+            style="@style/TextRedLarge"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/wrong"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingOptimalText" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/trainingCardLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/trainingcorrect">
+
+
+            <ImageView
+                android:id="@+id/card1"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/cardback"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/card2"
+                app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
+                />
+
+            <ImageView
+                android:id="@+id/card2"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/cardback"
+                app:layout_constraintStart_toEndOf="@id/card1"
+                app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
+                />
+
+            <ImageView
+                android:id="@+id/card3"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/cardback"
+                app:layout_constraintStart_toEndOf="@id/card2"
+                app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
+                />
+
+            <ImageView
+                android:id="@+id/card4"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/cardback"
+                app:layout_constraintStart_toEndOf="@id/card3"
+                app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
+                />
+
+            <ImageView
+                android:id="@+id/card5"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:src="@drawable/cardback"
+                app:layout_constraintStart_toEndOf="@id/card4"
+                app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
+                />
+
+            <TextView
+                android:text="@string/hold"
+                android:id="@+id/trainingCard1Hold"
+                style="@style/HoldTrainingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/card1"
+                app:layout_constraintStart_toStartOf="@id/card1"
+                app:layout_constraintTop_toTopOf="@id/card1" />
+
+            <TextView
+                android:text="@string/hold"
+                android:id="@+id/trainingCard2Hold"
+                style="@style/HoldTrainingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/card2"
+                app:layout_constraintStart_toStartOf="@id/card2"
+                app:layout_constraintTop_toTopOf="@id/card2" />
+
+            <TextView
+                android:text="@string/hold"
+                android:id="@+id/trainingCard3Hold"
+                style="@style/HoldTrainingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/card3"
+                app:layout_constraintStart_toStartOf="@id/card3"
+                app:layout_constraintTop_toTopOf="@id/card3" />
+
+            <TextView
+                android:text="@string/hold"
+                android:id="@+id/trainingCard4Hold"
+                style="@style/HoldTrainingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/card4"
+                app:layout_constraintStart_toStartOf="@id/card4"
+                app:layout_constraintTop_toTopOf="@id/card4" />
+
+            <TextView
+                android:text="@string/hold"
+                android:id="@+id/trainingCard5Hold"
+                style="@style/HoldTrainingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@+id/card5"
+                app:layout_constraintStart_toStartOf="@id/card5"
+                app:layout_constraintTop_toTopOf="@id/card5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TableLayout
         android:padding="7dp"
@@ -160,174 +376,215 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/hand"
-        android:layout_margin="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/payoutTable"
         app:layout_constraintBottom_toTopOf="@id/buttons"
-        app:layout_constraintTop_toBottomOf="@id/payoutTable">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.wajahatkarim3.easyflipview.EasyFlipView
             android:id="@+id/card1layout"
-            android:tag="flip1"
             android:layout_width="70dp"
             android:layout_height="100dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:flipOnTouch="false"
+            android:tag="flip1"
+            app:flipDuration="200"
             app:flipEnabled="true"
-            app:flipDuration="250"
+            app:flipFrom="front"
+            app:flipOnTouch="false"
             app:flipType="horizontal"
-            app:flipFrom="front">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back"/>
+            <include layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
-            <include layout="@layout/card_layout_front"/>
+            <include layout="@layout/card_layout_front" />
 
         </com.wajahatkarim3.easyflipview.EasyFlipView>
-
-        <TextView
-            style="@style/HoldTextView"
-            android:id="@+id/card1Hold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/card1layout"
-            app:layout_constraintTop_toTopOf="@id/card1layout"
-            app:layout_constraintEnd_toEndOf="@+id/card1layout" />
 
         <com.wajahatkarim3.easyflipview.EasyFlipView
             android:id="@+id/card2layout"
-            android:tag="flip2"
             android:layout_width="70dp"
             android:layout_height="100dp"
-            app:layout_constraintStart_toEndOf="@id/card1layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:flipOnTouch="false"
+            android:tag="flip2"
+            app:flipDuration="200"
             app:flipEnabled="true"
-            app:flipDuration="250"
-            app:flipType="horizontal"
             app:flipFrom="front"
-            >
+            app:flipOnTouch="false"
+            app:flipType="horizontal"
+            app:layout_constraintStart_toEndOf="@id/card1layout"
+            app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back"/>
+            <include layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
-            <include layout="@layout/card_layout_front_two"/>
+            <include layout="@layout/card_layout_front_two" />
 
         </com.wajahatkarim3.easyflipview.EasyFlipView>
-
-
-        <TextView
-            style="@style/HoldTextView"
-            android:id="@+id/card2Hold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/card2layout"
-            app:layout_constraintTop_toTopOf="@id/card2layout"
-            app:layout_constraintEnd_toEndOf="@+id/card2layout" />
 
         <com.wajahatkarim3.easyflipview.EasyFlipView
             android:id="@+id/card3layout"
-            android:tag="flip3"
             android:layout_width="70dp"
             android:layout_height="100dp"
-            app:layout_constraintStart_toEndOf="@id/card2layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:flipOnTouch="false"
+            android:tag="flip3"
+            app:flipDuration="200"
             app:flipEnabled="true"
-            app:flipDuration="250"
-            app:flipType="horizontal"
             app:flipFrom="front"
-            >
+            app:flipOnTouch="false"
+            app:flipType="horizontal"
+            app:layout_constraintStart_toEndOf="@id/card2layout"
+            app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back"/>
+            <include layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
-            <include layout="@layout/card_layout_front_three"/>
+            <include layout="@layout/card_layout_front_three" />
 
         </com.wajahatkarim3.easyflipview.EasyFlipView>
-
-        <TextView
-            style="@style/HoldTextView"
-            android:id="@+id/card3Hold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/card3layout"
-            app:layout_constraintTop_toTopOf="@id/card3layout"
-            app:layout_constraintEnd_toEndOf="@+id/card3layout" />
 
         <com.wajahatkarim3.easyflipview.EasyFlipView
             android:id="@+id/card4layout"
-            android:tag="flip4"
             android:layout_width="70dp"
             android:layout_height="100dp"
-            app:layout_constraintStart_toEndOf="@id/card3layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:flipOnTouch="false"
+            android:tag="flip4"
+            app:flipDuration="200"
             app:flipEnabled="true"
-            app:flipDuration="250"
-            app:flipType="horizontal"
             app:flipFrom="front"
-            >
+            app:flipOnTouch="false"
+            app:flipType="horizontal"
+            app:layout_constraintStart_toEndOf="@id/card3layout"
+            app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back"/>
+            <include layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
-            <include layout="@layout/card_layout_front_four"/>
+            <include layout="@layout/card_layout_front_four" />
 
         </com.wajahatkarim3.easyflipview.EasyFlipView>
-
-        <TextView
-            style="@style/HoldTextView"
-            android:id="@+id/card4Hold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/card4layout"
-            app:layout_constraintTop_toTopOf="@id/card4layout"
-            app:layout_constraintEnd_toEndOf="@+id/card4layout" />
 
         <com.wajahatkarim3.easyflipview.EasyFlipView
             android:id="@+id/card5layout"
-            android:tag="flip5"
             android:layout_width="70dp"
             android:layout_height="100dp"
-            app:layout_constraintStart_toEndOf="@id/card4layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:flipOnTouch="false"
+            android:tag="flip5"
+            app:flipDuration="200"
             app:flipEnabled="true"
-            app:flipDuration="250"
-            app:flipType="horizontal"
             app:flipFrom="front"
-            >
+            app:flipOnTouch="false"
+            app:flipType="horizontal"
+            app:layout_constraintStart_toEndOf="@id/card4layout"
+            app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back"/>
+            <include layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
-            <include layout="@layout/card_layout_front_five"/>
+            <include layout="@layout/card_layout_front_five" />
 
         </com.wajahatkarim3.easyflipview.EasyFlipView>
 
         <TextView
+            android:id="@+id/card1Hold"
             style="@style/HoldTextView"
-            android:id="@+id/card5Hold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/card1layout"
+            app:layout_constraintStart_toStartOf="@id/card1layout"
+            app:layout_constraintTop_toTopOf="@id/card1layout" />
+
+        <TextView
+            android:id="@+id/card2Hold"
+            style="@style/HoldTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/card2layout"
+            app:layout_constraintStart_toStartOf="@id/card2layout"
+            app:layout_constraintTop_toTopOf="@id/card2layout" />
+
+        <TextView
+            android:id="@+id/card3Hold"
+            style="@style/HoldTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/card3layout"
+            app:layout_constraintStart_toStartOf="@id/card3layout"
+            app:layout_constraintTop_toTopOf="@id/card3layout" />
+
+
+        <TextView
+            android:id="@+id/card4Hold"
+            style="@style/HoldTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/card4layout"
+            app:layout_constraintStart_toStartOf="@id/card4layout"
+            app:layout_constraintTop_toTopOf="@id/card4layout" />
+
+        <TextView
+            android:id="@+id/card5Hold"
+            style="@style/HoldTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/card5layout"
             app:layout_constraintStart_toStartOf="@id/card5layout"
-            app:layout_constraintTop_toTopOf="@id/card5layout"
-            app:layout_constraintEnd_toEndOf="@+id/card5layout" />
+            app:layout_constraintTop_toTopOf="@id/card5layout" />
+
+        <TextView
+            style="@style/TextWhite"
+            android:id="@+id/gameInstructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:text="@string/tap_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bonusButtons"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hand">
+
+        <Button
+            style="@style/ButtonRed"
+            android:id="@+id/doubleDownRed"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/red_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/doubleDownBlack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/doubleDownBlack"
+            style="@style/ButtonBlack"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/black_button"
+            app:layout_constraintStart_toEndOf="@id/doubleDownRed"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttons"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:layout_marginEnd="20dp"
         android:padding="5dp"
         android:layout_width="wrap_content"
@@ -344,6 +601,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/bet_one_button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -355,8 +613,19 @@
             android:layout_margin="5dp"
             android:text="@string/bet_max_button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/Deal"
             app:layout_constraintStart_toEndOf="@id/betone"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/doubleDown"
+            style="@style/ButtonYellow"
+            android:enabled="false"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/double_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/betmax"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -364,9 +633,12 @@
             style="@style/ButtonYellow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/deal_button"
-            app:layout_constraintStart_toEndOf="@id/betmax"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/doubleDown"
             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -376,7 +648,7 @@
         android:id="@+id/checkboxLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/buttons"
         app:layout_constraintStart_toStartOf="parent"
@@ -390,25 +662,70 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_gravity="center"
-            android:text="show tip" />
+            android:text="analysis" />
 
+        <CheckBox
+            android:id="@+id/autoHold"
+            style="@style/TextWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:text="@string/autohold" />
 
-<!--        <CheckBox-->
-<!--            android:id="@+id/showStats"-->
-<!--            style="@style/TextWhite"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:text="@string/hand_stats"/>-->
+        <CheckBox
+            android:id="@+id/trainingMode"
+            style="@style/TextWhite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/training"/>
+    </LinearLayout>
 
-<!--        <CheckBox-->
-<!--            android:id="@+id/trainingMode"-->
-<!--            style="@style/TextWhite"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:text="@string/training"/>-->
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/simulateView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/table_background"
+        app:layout_constraintTop_toBottomOf="@id/checkboxLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextWhite"
+            android:id="@+id/simulationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Simulations"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+          `  <Button
+                android:id="@+id/simulate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Run" />
+
+            <Button
+                android:id="@+id/best"
+                android:enabled="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Results" />`
+
+        </LinearLayout>
+
     </LinearLayout>
 
 
@@ -428,5 +745,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/hand" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        app:layout_constraintTop_toBottomOf="@id/simulateView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-7137320034166109/4056911260">
+    </com.google.android.gms.ads.AdView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

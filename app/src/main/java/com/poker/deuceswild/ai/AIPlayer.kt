@@ -1,13 +1,10 @@
 package com.poker.deuceswild.ai
 
 import android.content.Context
-import com.poker.deuceswild.handevaluator.HandEvaluator
-import com.poker.deuceswild.handevaluator.HandRank
-import com.poker.deuceswild.handevaluator.PokerCard
-import com.poker.deuceswild.handevaluator.Suit
 import com.poker.deuceswild.cardgame.Card
 import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
+import com.poker.deuceswild.payout.PayTableManager
 import timber.log.Timber
 
 data class AIDecision (
@@ -56,57 +53,26 @@ object AIPlayer {
             Timber.d("====== Monte Carlo Simulation ======")
         }
 
-//        var trial = 0
-//        var expectedPayout = 0.0
-//        val evals = mutableListOf<HandRank>()
-//        while (trial < numTrials) {
-//            val tempHand = Deck.draw5Random(hand.toMutableList())
-//            val tempHandPC = tempHand.map { card -> PokerCard(Rank(card.face), Suit.parse(card.suit)) }.toTypedArray()
-//
-//            val eval = HandEvaluator.evaluateSpecificHand(tempHandPC)
-//            evals.add(eval)
-//            val payout = PayOutHelper.calculatePayout(context, bet,
-//                convertEvalRank(
-//                    hand,
-//                    eval
-//                )
-//            )
-//
-//            expectedPayout += payout
-//            trial += 1
-//        }
-//
-//        if(DEBUG) {
-//            val evalCounts = evals.groupingBy { it }.eachCount()
-//            Timber.d("${hand.joinToString { it.toString() }} $evalCounts ${expectedPayout/numTrials}")
-//            Timber.d("====================================")
-//        }
+        var trial = 0
+        var expectedPayout = 0.0
+        val evals = mutableListOf<Evaluate.Hand>()
+        while (trial < numTrials) {
+            val tempHand = Deck.draw5Random(hand.toMutableList())
+            val eval = Evaluate.evaluate(tempHand)
+            evals.add(eval.first)
+            val payout = PayTableManager.getPayOut(eval.first)
+            expectedPayout += payout
+            trial += 1
+        }
 
-        return 0.0
+        if(DEBUG) {
+            val evalCounts = evals.groupingBy { it }.eachCount()
+            Timber.d("${hand.joinToString { it.toString() }} $evalCounts ${expectedPayout/numTrials}")
+            Timber.d("====================================")
+        }
+
+        return expectedPayout/numTrials
     }
-
-//    private fun convertEvalRank(hand: List<Card>, rank: HandRank) : Evaluate.Hand{
-//        return when(rank) {
-//            HandRank.ROYAL_FLUSH -> Evaluate.Hand.ROYAL_FLUSH // todo
-//            HandRank.STRAIGHT_FLUSH -> Evaluate.Hand.STRAIGHT_FLUSH
-//            HandRank.FOUR_OF_A_KIND -> Evaluate.Hand.FOUR_OF_A_KIND
-//            HandRank.FULL_HOUSE -> Evaluate.Hand.FULL_HOUSE
-//            HandRank.FLUSH -> Evaluate.Hand.FLUSH
-//            HandRank.STRAIGHT -> Evaluate.Hand.STRAIGHT
-//            HandRank.THREE_OF_A_KIND -> Evaluate.Hand.THREE_OF_A_KIND
-//            HandRank.TWO_PAIR -> Evaluate.Hand.TWO_PAIRS
-//            HandRank.ONE_PAIR -> {
-//                // todo this has to be done. A better way is
-//                // to put this logic in HandEvaluator.java
-//                if (Evaluate.isPairJackOrBetter(hand)) {
-//                    Evaluate.Hand.JACKS_OR_BETTER
-//                } else {
-//                    Evaluate.Hand.NOTHING
-//                }
-//            }
-//            HandRank.HIGH_CARD -> Evaluate.Hand.NOTHING
-//        }
-//    }
 
     private fun <T> Collection<T>.powerset(): Set<Set<T>> = when {
         isEmpty() -> setOf(setOf())

@@ -2,6 +2,7 @@ package com.poker.deuceswild.ai
 
 import com.poker.deuceswild.cardgame.Card
 import com.poker.deuceswild.cardgame.Deck
+import com.poker.deuceswild.cardgame.Evaluate
 import timber.log.Timber
 
 object Strategy {
@@ -14,7 +15,7 @@ object Strategy {
     )
 
     fun bestStrategy(cards: List<Card>) : StrategyResponse {
-        when(deuceCount(cards)) {
+        when(Evaluate.deuceCount(cards)) {
             4 -> {
                return deuces4Strat(cards)
             }
@@ -32,278 +33,6 @@ object Strategy {
             }
         }
         return StrategyResponse(cards, emptyList(), listOf("no strategy :("),"no strategy :(")
-    }
-
-
-    private fun isRoyalFlush(cards: List<Card>) : Boolean {
-        return isFlush(cards) && isStraight(cards) && isRoyal(getNonDeuceCards(cards))
-    }
-
-    private fun isFourToARoyal(cards: List<Card>) : Pair<List<Card>,Boolean> {
-        for(i in 0..4) {
-            val cardCopy = cards.toMutableList()
-            cardCopy[i] = Card(2,'s')
-            if(isRoyalFlush(cards)){
-                cardCopy.remove(Card(2,'s'))
-                return Pair(cardCopy,true)
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    fun isThreeToRoyalFlush(cards: List<Card>): Pair<List<Card>,Boolean>  {
-        for (i in 0..4){
-            for (j in 0..4){
-                if(i != j){
-                    val cardsCopy = cards.toMutableList()
-                    cardsCopy[i] = Card(2,'s')
-                    cardsCopy[j] = Card(2,'h')
-                    if (isRoyalFlush(cardsCopy)) {
-                        cardsCopy.remove(Card(2,'s'))
-                        cardsCopy.remove(Card(2,'h'))
-                        return Pair(cardsCopy,true)
-                    }
-                }
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isTwoToARoyalFlushJQHigh(cards: List<Card>): Pair<List<Card>,Boolean> {
-        for (i in 0..4){
-            for (j in 0..4){
-                for (k in 0..4){
-                    if(i != j && j != k && i != k) {
-                        val cardsCopy = cards.toMutableList()
-                        cardsCopy[i] = Card(2, 's')
-                        cardsCopy[j] = Card(2, 'h')
-                        cardsCopy[k] = Card(2, 'c')
-                        if (isRoyalFlush(cardsCopy)) {
-                            cardsCopy.remove(Card(2, 's'))
-                            cardsCopy.remove(Card(2, 'h'))
-                            cardsCopy.remove(Card(2, 'c'))
-                            return Pair(cardsCopy,true)
-                        }
-                    }
-                }
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isRoyal(cards: List<Card>) : Boolean {
-        return cards.filter {
-            it.rank == 10 ||
-            it.rank == 11 ||
-            it.rank == 12 ||
-            it.rank == 13 ||
-            it.rank == 14 }.size == cards.size
-    }
-
-    private fun makeAceLow(cards: List<Card>) : List<Card>{
-        for(c in cards) {
-            if (c.rank == 14){
-                c.rank = 1
-            }
-        }
-        return cards
-    }
-
-    private fun isStraightFlush(cards: List<Card>) : Boolean {
-        return isStraight(cards) && isFlush(cards)
-    }
-
-    private fun isFourToStraightFlush(cards: List<Card>) : Pair<List<Card>,Boolean> {
-        for(i in 0..4) {
-            val cardCopy = cards.toMutableList()
-            cardCopy[i] = Card(2,'s')
-            if (isStraightFlush(cardCopy)) {
-                cardCopy.remove(Card(2,'s'))
-                return Pair(cardCopy, true)
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isThreeToStraightFlush(cards: List<Card>): Pair<List<Card>,Boolean> {
-        for (i in 0..4){
-            for (j in 0..4){
-                if(i != j){
-                    val cardsCopy = cards.toMutableList()
-                    cardsCopy[i] = Card(2,'s')
-                    cardsCopy[j] = Card(2,'h')
-                    if (isStraightFlush(cardsCopy)) {
-                        cardsCopy.remove(Card(2,'s'))
-                        cardsCopy.remove(Card(2,'h'))
-                        return Pair(cardsCopy, true)
-                    }
-                }
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isFiveOfKind(cards: List<Card>) : Boolean {
-        val groups = getNonDeuceCards(cards).groupBy { it.rank }
-        val deuceCount = deuceCount(cards)
-        return groups.any { (it.value.size + deuceCount) ==  5}
-    }
-
-    private fun isFourOfAKind(cards: List<Card>) : Pair<List<Card>,Boolean> {
-        val groups = getNonDeuceCards(cards).groupBy { it.rank }
-        val deuceCount = deuceCount(cards)
-        val isFourOfAKind = groups.any { (it.value.size + deuceCount) ==  4}
-        return if(isFourOfAKind){
-            val largestGroup = (groups[4-deuceCount]?.toMutableList() ?: mutableListOf())
-            largestGroup.addAll(getDeuceCards(cards))
-            Pair(largestGroup, true)
-        } else {
-            Pair(emptyList(), false)
-        }
-    }
-
-    private fun isFullHouse(cards: List<Card>) : Boolean {
-        val groups = getNonDeuceCards(cards).groupBy { it.rank }
-        return when(groups.size){
-            1,
-            2 -> { groups.any { it.value.size != 4 } }
-            else -> false
-        }
-    }
-
-    private fun isFlush(cards: List<Card>): Boolean {
-        val noDeuce = getNonDeuceCards(cards)
-        val suit = noDeuce[0].suit
-        if (noDeuce.drop(1).all { it.suit == suit }) return true
-        return false
-    }
-
-//    private fun isFlush(cards: List<Card>): Boolean {
-//        val suit = cards[0].suit
-//        if (cards.drop(1).all { it.suit == suit }) return true
-//        return false
-//    }
-
-    private fun isFourToFlush(cards: List<Card>): Pair<List<Card>,Boolean> {
-        val suit = cards.groupBy { it.suit }.toSortedMap().firstKey()
-        for(i in 0..4) {
-            val cardCopy = cards.toMutableList()
-            cardCopy[i] = Card(2,suit)
-            if (isFlush(cardCopy)) {
-                cardCopy.remove(Card(2,suit))
-                return Pair(cardCopy, true)
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isStraight(cards: List<Card>): Boolean {
-        val sorted = getNonDeuceCards(cards).sortedBy { it.rank }
-        var deuceCount = deuceCount(cards)
-        var index = 0
-        var count = 0
-        var lowerBoundCard = sorted[index].rank
-        while (deuceCount >= 0 && count < 4) {//23456
-            if(index < cards.size - 1 && lowerBoundCard == cards[index+1].rank + 1){
-                // next card is part of straight
-                index += 1
-                lowerBoundCard = cards[index+1].rank
-            } else{
-                // use a deuce
-                deuceCount -= 1
-                lowerBoundCard += 1
-            }
-            count += 1
-        }
-        if(count == 4){
-            Timber.d("straight = ${sorted}")
-        }
-        // todo this is wrong and doesnt check for ace low straight
-//                || (count == 3 && isStraight(makeAceLow(cards.toList())))
-        return count == 4
-    }
-
-    private fun isFourToOutsideStraight(cards: List<Card>): Pair<List<Card>,Boolean> {
-        val sorted = cards.sortedBy { it.rank }
-        for(i in 0..4) {
-            val cardCopy = sorted.toMutableList()
-            cardCopy[i] = Card(2,'c')
-            if(isStraight(cardCopy)
-                    && cardCopy[0].rank > 2
-                    && cardCopy[4].rank < 14
-                    && (i == 0 || i == 4) ){
-                cardCopy.remove(Card(2,'c'))
-                return Pair(cardCopy, true)
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isFourToInsideStraightAndDontNeedDeuce(cards: List<Card>): Pair<List<Card>,Boolean> {
-        val sorted = cards.sortedBy { it.rank }
-        for(i in 0..4) {
-            val cardCopy = sorted.toMutableList()
-            cardCopy[i] = Card(2,'c')
-            /**
-             *  AD345
-             *  34567
-             */
-            if(isStraight(cardCopy) &&
-                    (i != 0 || i != 4) &&
-                    (i != 1)){
-                cardCopy.remove(Card(2,'c'))
-                return Pair(cardCopy,true)
-            }
-        }
-        return Pair(emptyList(),false)
-    }
-
-    private fun isThreeOfAKind(cards: List<Card>): Pair<List<Card>,Boolean> {
-        val groups = getNonDeuceCards(cards).groupBy { it.rank }
-        val isThreeOfAKind = groups.any { it.value.size == 3 || (it.value.size + deuceCount(cards) == 3) }
-        return if(isThreeOfAKind){
-            for (i in 0..4){
-                for (j in 0..4){
-                    for (k in 0..4){
-                        if((i != j && j != k && i != k) &&
-                                (cards[i].rank == cards[j].rank || cards[i].rank == 2 || cards[j].rank == 2) &&
-                                (cards[j].rank == cards[k].rank || cards[j].rank == 2 || cards[k].rank == 2) &&
-                                (cards[i].rank == cards[k].rank || cards[i].rank == 2 || cards[k].rank == 2)) {
-                            Pair(listOf(cards[i], cards[j], cards[k]), true)
-                        }
-                    }
-                }
-            }
-            Pair(emptyList(),false)
-        } else {
-            Pair(emptyList(),false)
-        }
-    }
-
-    private fun isPair(cards: List<Card>): Pair<List<Card>,Boolean>{
-        // ASSUMING NO DEUCES
-        // this returns the highest pair in two pairs
-        val sorted = cards.sortedByDescending { it.rank }
-        for (i in 0..4){
-            for (j in 0..4){
-                if(i != j && sorted[i].rank == sorted[j].rank){
-                    return Pair(listOf(sorted[i],sorted[j]),true)
-                }
-            }
-        }
-       return Pair(emptyList(),false)
-    }
-
-    private fun getNonDeuceCards(cards: List<Card>) : List<Card> {
-        return cards.filter { it.rank != 2 }
-    }
-
-    private fun getDeuceCards(cards: List<Card>) : List<Card> {
-        return cards.filter { it.rank == 2 }
-    }
-
-    fun deuceCount(cards: List<Card>) : Int {
-        return cards.filter { it.rank == 2 }.count()
     }
 
     /**
@@ -328,7 +57,7 @@ object Strategy {
         // todo add sequential royal, natural royal, wild royal
         val tipsRuledOut = mutableListOf<String>()
         tipsRuledOut.add("royal flush")
-        return if(isRoyalFlush(cards)){
+        return if(Evaluate.isRoyalFlush(cards)){
             StrategyResponse(cards, cards, tipsRuledOut,"royal flush")
         } else {
             tipsRuledOut.add("three deuces")
@@ -349,35 +78,35 @@ object Strategy {
 
         // todo add sequential royal, natural royal, wild royal
         tipsRuledOut.add("royal flush")
-        if(isRoyalFlush(cards)){
+        if(Evaluate.isRoyalFlush(cards)){
             return StrategyResponse(cards, cards, tipsRuledOut,"royal flush")
         }
 
         tipsRuledOut.add("five of a kind")
-        if(isFiveOfKind(cards)){
+        if(Evaluate.isFiveOfKind(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"five of a kind")
         }
 
         tipsRuledOut.add("straight flush")
-        if(isStraightFlush(cards)){
+        if(Evaluate.isStraightFlush(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"straight flush")
         }
 
         tipsRuledOut.add("four of a kind")
-        val (winCards, isFourOfAKind) = isFourOfAKind(cards)
+        val (winCards, isFourOfAKind) = Evaluate.isFourOfAKind(cards)
         if(isFourOfAKind){
             return StrategyResponse(cards, winCards,tipsRuledOut,"four of a kind")
         }
 
         tipsRuledOut.add("four to a royal")
-        val (winCards2, isFourToRoyal) = isFourToARoyal(cards)
+        val (winCards2, isFourToRoyal) = Evaluate.isFourToARoyal(cards)
         if(isFourToRoyal){
             return StrategyResponse(cards, winCards2,tipsRuledOut,"four to a royal")
         }
 
         // todo add check for 2 consecutive singletons 6-7 or higher
         tipsRuledOut.add("four to a straight flush")
-        val (winCards3, isFourToStraight) = isFourToStraightFlush(cards)
+        val (winCards3, isFourToStraight) = Evaluate.isFourToStraightFlush(cards)
         if(isFourToStraight) {
             return StrategyResponse(cards, winCards3,tipsRuledOut,"four to a straight flush")
         }
@@ -405,74 +134,74 @@ object Strategy {
 
         // todo add sequential royal, natural royal, wild royal
         tipsRuledOut.add("royal flush")
-        if(isRoyalFlush(cards)){
+        if(Evaluate.isRoyalFlush(cards)){
             return StrategyResponse(cards, cards, tipsRuledOut,"royal flush")
         }
 
         tipsRuledOut.add("five of a kind")
-        if(isFiveOfKind(cards)){
+        if(Evaluate.isFiveOfKind(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"five of a kind")
         }
 
         tipsRuledOut.add("straight flush")
-        if(isStraightFlush(cards)){
+        if(Evaluate.isStraightFlush(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"straight flush")
         }
 
         tipsRuledOut.add("four of a kind")
-        val (winCards, isFourOfAKind) = isFourOfAKind(cards)
+        val (winCards, isFourOfAKind) = Evaluate.isFourOfAKind(cards)
         if(isFourOfAKind) {
             return StrategyResponse(cards, winCards,tipsRuledOut,"four of a kind")
         }
 
         tipsRuledOut.add("four to a royal")
-        val (winCards2, isFourToARoyal) = isFourToARoyal(cards)
+        val (winCards2, isFourToARoyal) = Evaluate.isFourToARoyal(cards)
         if(isFourToARoyal){
             return StrategyResponse(cards, winCards2,tipsRuledOut,"four to a royal")
         }
 
         tipsRuledOut.add("full house")
-        if(isFullHouse(cards)){
+        if(Evaluate.isFullHouse(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"full house")
         }
         // todo implement add check for 3 consecutive singletons 5-7 or higher
         tipsRuledOut.add("four to a straight flush")
-        val (winCards4, fourToStraight) = isFourToStraightFlush(cards)
+        val (winCards4, fourToStraight) = Evaluate.isFourToStraightFlush(cards)
         if(fourToStraight){
             return StrategyResponse(cards, winCards4,tipsRuledOut,"four to a straight flush")
         }
 
         tipsRuledOut.add("four to a straight flush")
-        if(isFlush(cards)){
+        if(Evaluate.isFlush(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"four to a straight flush")
         }
 
         tipsRuledOut.add("straight")
-        if(isStraight(cards)){
+        if(Evaluate.isStraight(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"straight")
         }
 
         tipsRuledOut.add("three of a kind")
-        val (winCards5, isThreeOfAKind) = isThreeOfAKind(cards)
+        val (winCards5, isThreeOfAKind) = Evaluate.isThreeOfAKind(cards)
         if(isThreeOfAKind){
             return StrategyResponse(cards, winCards5,tipsRuledOut,"three of a kind")
         }
 
         // todo add All other 4 to a straight flush
         tipsRuledOut.add("four to a straight flush")
-        val (winCards6, fourToStraight2) = isFourToStraightFlush(cards)
+        val (winCards6, fourToStraight2) = Evaluate.isFourToStraightFlush(cards)
         if(fourToStraight2){
             return StrategyResponse(cards, winCards6,tipsRuledOut,"four to a straight flush")
         }
 
         tipsRuledOut.add("three to a royal flush")
-        val (winCards7, treeToRoyalFlush) = isThreeToRoyalFlush(cards)
+        val (winCards7, treeToRoyalFlush) = Evaluate.isThreeToRoyalFlush(cards)
         if(treeToRoyalFlush){
             return StrategyResponse(cards, winCards7,tipsRuledOut,"three to a royal flush")
         }
 
         tipsRuledOut.add("four to a straight flush")
-        val (winCards8, threeToRoyal) = isThreeToStraightFlush(cards)
+        val (winCards8, threeToRoyal) = Evaluate.isThreeToStraightFlush(cards)
         if(threeToRoyal){
             return StrategyResponse(cards, winCards8,tipsRuledOut,"four to a straight flush")
         }
@@ -500,92 +229,92 @@ object Strategy {
         val tipsRuledOut = mutableListOf<String>()
 
         tipsRuledOut.add("royal flush")
-        if(isRoyalFlush(cards)){
+        if(Evaluate.isRoyalFlush(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"royal flush")
         }
 
         tipsRuledOut.add("four to a royal")
-        val (winCards, isFourToARoyal) = isFourToARoyal(cards)
+        val (winCards, isFourToARoyal) = Evaluate.isFourToARoyal(cards)
         if(isFourToARoyal){
             return StrategyResponse(cards, winCards,tipsRuledOut,"four to a royal")
         }
 
         tipsRuledOut.add("straight flush")
-        if(isStraightFlush(cards)){
+        if(Evaluate.isStraightFlush(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"straight flush")
         }
 
         tipsRuledOut.add("four of a kind")
-        val (winCards1, isFourOfAKind) = isFourOfAKind(cards)
+        val (winCards1, isFourOfAKind) = Evaluate.isFourOfAKind(cards)
         if(isFourOfAKind){
             return StrategyResponse(cards, winCards1,tipsRuledOut,"four of a kind")
         }
 
         tipsRuledOut.add("full house")
-        if(isFullHouse(cards)){
+        if(Evaluate.isFullHouse(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"full house")
         }
 
         tipsRuledOut.add("flush")
-        if(isFlush(cards)){
+        if(Evaluate.isFlush(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"flush")
         }
 
         tipsRuledOut.add("straight")
-        if(isStraight(cards)){
+        if(Evaluate.isStraight(cards)){
             return StrategyResponse(cards, cards,tipsRuledOut,"straight")
         }
 
         tipsRuledOut.add("three of a kind")
-        val (winCards2, isThreeOfAKind) = isThreeOfAKind(cards)
+        val (winCards2, isThreeOfAKind) = Evaluate.isThreeOfAKind(cards)
         if(isThreeOfAKind){
             return StrategyResponse(cards, winCards2,tipsRuledOut,"three of a kind")
         }
 
         tipsRuledOut.add("four to a straight flush")
-        val (winCards3, isFourToStraightFlush) = isFourToStraightFlush(cards)
+        val (winCards3, isFourToStraightFlush) = Evaluate.isFourToStraightFlush(cards)
         if(isFourToStraightFlush){
             return StrategyResponse(cards, winCards3,tipsRuledOut,"four to a straight flush")
         }
 
         tipsRuledOut.add("three to a royal flush")
-        val (winCards4, isThreeToRoyalFlush) = isThreeToRoyalFlush(cards)
+        val (winCards4, isThreeToRoyalFlush) = Evaluate.isThreeToRoyalFlush(cards)
         if(isThreeToRoyalFlush){
             return StrategyResponse(cards, winCards4,tipsRuledOut,"three to a royal flush")
         }
 
         tipsRuledOut.add("pair")
-        val (winCards5, isPair) = isPair(cards)
+        val (winCards5, isPair) = Evaluate.isPair(cards)
         if(isPair){
             return StrategyResponse(cards, winCards5,tipsRuledOut,"pair")
         }
 
         tipsRuledOut.add("four to a flush")
-        val (winCards6, isFourToFlush) = isFourToFlush(cards)
+        val (winCards6, isFourToFlush) = Evaluate.isFourToFlush(cards)
         if(isFourToFlush){
             return StrategyResponse(cards, winCards6,tipsRuledOut,"four to a flush")
         }
 
         tipsRuledOut.add("four to outside straight")
-        val (winCards7, isFourToOutsideStraight) = isFourToOutsideStraight(cards)
+        val (winCards7, isFourToOutsideStraight) = Evaluate.isFourToOutsideStraight(cards)
         if(isFourToOutsideStraight){
             return StrategyResponse(cards, winCards7,tipsRuledOut,"four to outside straight")
         }
 
         tipsRuledOut.add("three to straight flush")
-        val (winCards8, isThreeToStraightFlush) = isThreeToStraightFlush(cards)
+        val (winCards8, isThreeToStraightFlush) = Evaluate.isThreeToStraightFlush(cards)
         if(isThreeToStraightFlush){
             return StrategyResponse(cards, winCards8,tipsRuledOut,"three to straight flush")
         }
 
         tipsRuledOut.add("four to inside straight")
-        val (winCards9, isFourToInsideStraightAndDontNeedDeuce) = isFourToInsideStraightAndDontNeedDeuce(cards)
+        val (winCards9, isFourToInsideStraightAndDontNeedDeuce) = Evaluate.isFourToInsideStraightAndDontNeedDeuce(cards)
         if(isFourToInsideStraightAndDontNeedDeuce){
             return StrategyResponse(cards, winCards9,tipsRuledOut,"four to inside straight")
         }
 
         tipsRuledOut.add("two to a royal flush")
-        val (winCards10, isTwoToARoyalFlushJQHigh) = isTwoToARoyalFlushJQHigh(cards)
+        val (winCards10, isTwoToARoyalFlushJQHigh) = Evaluate.isTwoToARoyalFlushJQHigh(cards)
         if(isTwoToARoyalFlushJQHigh){
             return StrategyResponse(cards, winCards10,tipsRuledOut,"two to a royal flush")
         }
@@ -597,20 +326,24 @@ object Strategy {
 
 object StrategyTester {
 
+    enum class TestType{
+        STRAIGHT_FLUSH,
+        STRAIGHT,
+        INSIDE_STRAIGHT,
+        OUTSIDE_STRAIGHT,
+        FOUR_STRAIGHT_FLUSH,
+        FOUR_OF_A_KIND,
+        THREE_OF_A_KIND
+    }
+
     var decisions = mutableListOf<Strategy.StrategyResponse>()
 
     fun log(strategy: Strategy.StrategyResponse) {
         decisions.add(strategy)
     }
 
-    fun runSimulation(numTrials: Int = 200){
-        for (i in 1..numTrials){
-            Deck.newDeck()
-            val cards = Deck.draw5()
-            val bestStrategy = Strategy.bestStrategy(cards)
-            log(bestStrategy)
-        }
-        decisions.print()
+    fun runSimulation(numTrials: Int = 1000){
+        test(numTrials, TestType.THREE_OF_A_KIND)
     }
 
     fun List<Strategy.StrategyResponse>.print() {
@@ -619,26 +352,71 @@ object StrategyTester {
             prettyResponse += "\nfull cards: " + response.fullCards
             prettyResponse += "\nwinning cards: " + response.winningCards
             prettyResponse += "\neval: " + response.tip
-            prettyResponse += "\n"
         }
         prettyResponse += "====================================\n"
         Timber.d(prettyResponse)
     }
+
+    fun test(numTrials: Int, type: TestType){
+        when(type) {
+            TestType.STRAIGHT -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+                    if(Evaluate.isStraight(cards)){
+                        Timber.d("straight: $cards")
+                    }
+                }
+            }
+            TestType.STRAIGHT_FLUSH -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+                    if(Evaluate.isStraightFlush(cards)){
+                        Timber.d("straight flush: $cards")
+                    }
+                }
+            }
+            TestType.FOUR_STRAIGHT_FLUSH -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+                    val (winningCards, isFourToStraightFlush) = Evaluate.isFourToStraightFlush(cards)
+                    if(isFourToStraightFlush){
+                        Timber.d("4 to straight flush: $cards")
+                    }
+                }
+            }
+            TestType.INSIDE_STRAIGHT -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+                    val (winningCards, isFourToInside) = Evaluate.isFourToInsideStraightAndDontNeedDeuce(cards)
+                    if(isFourToInside){
+                        Timber.d("four to inside straight: $cards")
+                    }
+                }
+            }
+            TestType.FOUR_OF_A_KIND -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+                    val (winningCards, isFourofAkind) = Evaluate.isFourOfAKind(cards)
+                    if(isFourofAkind){
+                        Timber.d("four of a kind: $cards")
+                    }
+                }
+            }
+            TestType.THREE_OF_A_KIND -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+                    val (winningCards, isThree) = Evaluate.isThreeOfAKind(cards)
+                    if(isThree){
+                        Timber.d("three of a kind: $cards")
+                    }
+                }
+            }
+        }
+    }
 }
-
-
-
-//object StrategyTester {
-//
-//    val hands = listOf(
-//            listOf(Card(13,'c'),Card(12,'h'),Card(12,'c'),Card(14,'c'),Card(4,'s')), // three to royal
-////            listOf(Card(13,'c'),Card(12,'h'),Card(12,'c'),Card(14,'c'),Card(4,'s')) // three to royal
-//
-//    )
-//    //  2,2,2,2,4
-//    //  1,2,3,4,5
-//    //  3,3,4,2,4
-//    fun test3ToAFlush() {
-//        val result = Strategy.isThreeToRoyalFlush(hands[0])
-//    }
-//}

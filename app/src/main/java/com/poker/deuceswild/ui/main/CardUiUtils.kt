@@ -18,6 +18,7 @@ object CardUiUtils {
     fun showCardBacks(cardViews: List<ImageView>?) {
         cardViews?.forEach {
             it.setImageResource(R.drawable.cardback)
+            it.setBackgroundResource(R.drawable.cardback)
         }
     }
 
@@ -27,13 +28,20 @@ object CardUiUtils {
         }
     }
 
-    fun highlightHeldCards(holdsViews: List<TextView>?, fullHand: List<Card>?, heldHand: List<Card>?) {
-        unhighlightHeldCards(holdsViews)
-        fullHand?.forEachIndexed { index, card ->
-            if(heldHand?.contains(card) == true){
-                holdsViews?.get(index)?.visibility = View.VISIBLE
+    fun highlightHeldCards(holdsViews: List<TextView>, fullHand: List<Card>?, heldHand: List<Card>) {
+        if(fullHand == null) return
+        for (i in 0..4){
+            if(fullHand[i] in heldHand){
+                holdsViews[i].visibility = View.VISIBLE
+            } else {
+                holdsViews[i].visibility = View.INVISIBLE
             }
         }
+    }
+
+    fun toggleHighlightHeldCards(holdsViews: List<TextView>?, cardIndex: Int) {
+        val view = holdsViews?.get(cardIndex)
+        view?.visibility = if(view?.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
     }
 
     fun unhighlightHeldCards(holdsViews: List<TextView>?) {
@@ -41,6 +49,7 @@ object CardUiUtils {
     }
 
     fun cardToImage(card: Card?) : Int{
+//        Timber.d("${card?.rank}")
         if(card == null) return R.drawable.cardback
         return when(card.rank) {
             2 -> {

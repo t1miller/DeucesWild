@@ -1,6 +1,8 @@
 
 package com.poker.deuceswild.cardgame
 
+import timber.log.Timber
+
 
 object Evaluate {
 
@@ -31,175 +33,346 @@ object Evaluate {
         }
     }
 
-//    private fun isStraight(cards: List<Card>): Boolean {
-//        val sorted = cards.sortedBy { it.face }
-//        if (sorted[0].face + 4 == sorted[4].face) return true
-//        if (sorted[4].face == 14 && sorted[0].face == 2 && sorted[3].face == 5) return true
-//        return false
-//    }
-//
-//    private fun isFlush(cards: List<Card>): Boolean {
-//        val suit = cards[0].suit
-//        if (cards.drop(1).all { it.suit == suit }) return true
-//        return false
-//    }
-//
-//    private fun checkIfFlushIsRoyalFlush(cards: List<Card>): Boolean {
-//        // 10 + 11 + 12 + 13 + 14 = 60
-//        return cards.sumBy { it.face } == 60
-//    }
+    fun evaluate(hand: List<Card>) : Pair<Hand,List<Card>>{
 
-//    fun isPairJackOrBetter(cards: List<Card>) : Boolean {
-//        for (card1 in cards) {
-//            for (card2 in cards){
-//                if (card1 != card2 &&
-//                    card1.face == card2.face &&
-//                    card1.face > 10 ) {
-//                    return true
-//                }
-//            }
-//        }
-//        return false
-//    }
+        val isRoyalFlush = isRoyalFlush(hand)
 
-//    fun analyzeHand(hand: List<Card>): Hand {
-//        val groups = hand.groupBy { it.face }
-//        when (groups.size) {
-//            2 -> {
-//                if (groups.any { it.value.size == 4 }) return Hand.FOUR_OF_A_KIND
-//                return Hand.FULL_HOUSE
-//            }
-//            3 -> {
-//                if (groups.any { it.value.size == 3 }) return Hand.THREE_OF_A_KIND
-//                return Hand.TWO_PAIRS
-//            }
-//            4 -> return if (isPairJackOrBetter(
-//                    hand
-//                )
-//            ) {
-//                Hand.JACKS_OR_BETTER
-//            } else {
-//                Hand.NOTHING
-//            }
-//            else -> {
-//                val flush =
-//                    isFlush(hand)
-//                val straight =
-//                    isStraight(hand)
-//                val royal = flush && straight && checkIfFlushIsRoyalFlush(
-//                    hand
-//                )
-//                return when {
-//                    royal -> Hand.ROYAL_FLUSH
-//                    flush && straight -> Hand.STRAIGHT_FLUSH
-//                    flush             -> Hand.FLUSH
-//                    straight          -> Hand.STRAIGHT
-//                    else              -> Hand.NOTHING
-//                }
-//            }
-//        }
-//    }
+        if (isRoyalFlush && isSequential(hand)){
+            return Pair(Hand.SEQUENTIAL_ROYAL_FLUSH, hand)
+        }
 
-//    fun getWinningCards(hand: List<Card>?): List<Boolean> {
-//        if(hand == null) return listOf(false, false, false, false, false)
-//        val handEval =
-//            analyzeHand(hand)
-//        return when (handEval) {
-//            Hand.ROYAL_FLUSH,
-//            Hand.STRAIGHT_FLUSH,
-//            Hand.FULL_HOUSE,
-//            Hand.FLUSH,
-//            Hand.STRAIGHT -> listOf(true,true,true,true,true)
-//            Hand.FOUR_OF_A_KIND,
-//            Hand.THREE_OF_A_KIND,
-//            Hand.JACKS_OR_BETTER -> repeatedRank(
-//                hand
-//            )
-//            Hand.TWO_PAIRS -> findTwoPairIndex(
-//                hand
-//            )
-//            Hand.NOTHING -> listOf(false, false, false, false, false)
-//        }
-//    }
+        val deuceCount = deuceCount(hand)
+        if(isRoyalFlush &&  deuceCount == 0){
+            return Pair(Hand.NATURAL_ROYAL_FLUSH, hand)
+        }
 
-//    private fun repeatedRank(hand: List<Card>) : List<Boolean> {
-//        val repeatedList = mutableListOf(false, false, false, false, false)
-//        for (i in 0..4) {
-//            for (j in 0..4) {
-//                if (i != j && hand[i].face == hand[j].face){
-//                    val repeatedFace = hand[i].face
-//                    for ((k,c) in hand.withIndex()) {
-//                        repeatedList[k] = c.face == repeatedFace
-//                    }
-//                }
-//            }
-//        }
-//        return repeatedList
-//    }
+        if(deuceCount == 4){
+            return Pair(Hand.FOUR_DEUCES, hand)
+        }
 
-//    private fun findTwoPairIndex(hand: List<Card>) : List<Boolean> {
-//        val oddCardOut = mutableListOf<Boolean>()
-//        for (i in 0..4) {
-//            oddCardOut.add(
-//                hasPair(
-//                    hand[i],
-//                    hand
-//                )
-//            )
-//        }
-//        return oddCardOut
-//    }
-//
-//    private fun hasPair(card: Card, hand: List<Card>) : Boolean {
-//        for (i in 0..4) {
-//            if (card.face == hand[i].face && card != hand[i]) {
-//                return true
-//            }
-//        }
-//        return false
-//    }
+        if(isRoyalFlush && deuceCount > 0){
+            return Pair(Hand.WILD_ROYAL_FLUSH, hand)
+        }
 
-//    fun testEval(){
-//        // generate a bunch of hands
-//        val evals = mutableListOf<Hand>()
-//        for(i in 0..100000) {
-//            evals.add(
-//                analyzeHand(
-//                    Deck.draw5Random(mutableListOf())
-//                )
-//            )
-//        }
-//        val evalCounts = evals.groupingBy { it }.eachCount()
-//        Timber.d("$evalCounts")
-//    }
-//
-//    fun testIsWinninngCards(){
-//        val royalflush = mutableListOf<Card>()
-//        for (i in 10..14) {
-//            royalflush.add(Card(i,'s'))
-//        }
-//
-//        val straightflush = royalflush.toMutableList()
-//        straightflush[4].face = 9
-//
-//        val straight = straightflush.toMutableList()
-//        straight[2].suit = 's'
-//
-//        val flush = straightflush.toMutableList()
-//        flush[0].face = 2
-//
-//        val fullhouse = listOf(Card(10,'h'), Card(10,'d'), Card(10,'c'), Card(3,'s'), Card(3,'c'))
-//
-//        val fourofakind = fullhouse.toMutableList()
-//        fourofakind[3].face = 2
-//
-//        val twoPair = fullhouse.toMutableList()
-//        twoPair[2].face = 8
-//
-//        val jacksorbetter = twoPair.toMutableList()
-//        jacksorbetter[2].face = 9
-//
-//        val nothing = jacksorbetter.toMutableList()
-//        nothing[0].face = 11
-//    }
+        if(isFiveOfKind(hand)){
+            return Pair(Hand.FIVE_OF_A_KIND, hand)
+        }
+
+        if(isStraightFlush(hand)){
+            return Pair(Hand.STRAIGHT_FLUSH, hand)
+        }
+
+        val (winningCards,isFourOfAKind) = isFourOfAKind(hand)
+        if(isFourOfAKind){
+            return Pair(Hand.FOUR_OF_A_KIND, winningCards)
+        }
+
+        if(isFullHouse(hand)){
+            return Pair(Hand.FULL_HOUSE, hand)
+        }
+
+        if(isFlush(hand)){
+            return Pair(Hand.FLUSH, winningCards)
+        }
+
+        if(isStraight(hand)){
+            return Pair(Hand.STRAIGHT, winningCards)
+        }
+
+        val (winningCards2,isThreeOfAkind) = isThreeOfAKind(hand)
+        if(isThreeOfAkind){
+            return Pair(Hand.THREE_OF_A_KIND, winningCards2)
+        }
+
+        return Pair(Hand.NOTHING, emptyList())
+    }
+
+    private fun isSequential(cards: List<Card>) : Boolean{
+        for (i in 0..4){
+            if(i < cards.size -1 && (cards[i].rank >= cards[i+1].rank)){
+                // cards not in increasing order
+                return false
+            }
+        }
+        return true
+    }
+
+    fun isRoyalFlush(cards: List<Card>) : Boolean {
+        return isFlush(cards) && isStraight(cards) && isRoyal(getNonDeuceCards(cards))
+    }
+
+    fun isFourToARoyal(cards: List<Card>) : Pair<List<Card>,Boolean> {
+        for(i in 0..4) {
+            val cardCopy = cards.toMutableList()
+            cardCopy[i] = Card(2,'s')
+            if(isRoyalFlush(cards)){
+                cardCopy.remove(Card(2,'s'))
+                return Pair(cardCopy,true)
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    fun isThreeToRoyalFlush(cards: List<Card>): Pair<List<Card>,Boolean>  {
+        for (i in 0..4){
+            for (j in 0..4){
+                if(i != j){
+                    val cardsCopy = cards.toMutableList()
+                    cardsCopy[i] = Card(2,'s')
+                    cardsCopy[j] = Card(2,'h')
+                    if (isRoyalFlush(cardsCopy)) {
+                        cardsCopy.remove(Card(2,'s'))
+                        cardsCopy.remove(Card(2,'h'))
+                        return Pair(cardsCopy,true)
+                    }
+                }
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    fun isTwoToARoyalFlushJQHigh(cards: List<Card>): Pair<List<Card>,Boolean> {
+        for (i in 0..4){
+            for (j in 0..4){
+                for (k in 0..4){
+                    if(i != j && j != k && i != k) {
+                        val cardsCopy = cards.toMutableList()
+                        cardsCopy[i] = Card(2, 's')
+                        cardsCopy[j] = Card(2, 'h')
+                        cardsCopy[k] = Card(2, 'c')
+                        if (isRoyalFlush(cardsCopy)) {
+                            cardsCopy.remove(Card(2, 's'))
+                            cardsCopy.remove(Card(2, 'h'))
+                            cardsCopy.remove(Card(2, 'c'))
+                            return Pair(cardsCopy,true)
+                        }
+                    }
+                }
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    private fun isRoyal(cards: List<Card>) : Boolean {
+        return cards.filter {
+            it.rank == 10 ||
+                    it.rank == 11 ||
+                    it.rank == 12 ||
+                    it.rank == 13 ||
+                    it.rank == 14 }.size == cards.size
+    }
+
+    fun makeAceLow(cards: List<Card>) : List<Card>{
+        for(c in cards) {
+            if (c.rank == 14){
+                c.rank = 1
+            }
+        }
+        return cards
+    }
+
+    fun makeAceHigh(cards: List<Card>) : List<Card>{
+        for(c in cards) {
+            if (c.rank == 1){
+                c.rank = 14
+            }
+        }
+        return cards
+    }
+
+    fun isStraightFlush(cards: List<Card>) : Boolean {
+        return isStraight(cards) && isFlush(cards)
+    }
+
+    fun isFourToStraightFlush(cards: List<Card>) : Pair<List<Card>,Boolean> {
+        var debug = ""
+        for(i in 0..4) {
+            val cardCopy = cards.toMutableList()
+            cardCopy[i] = Card(2,'s')
+            if (isStraightFlush(cardCopy)) {
+                debug += "cards: $cardCopy\n"
+                cardCopy.remove(Card(2,'s'))
+                debug += "isflush: ${isFlush(cardCopy)}\n"
+                debug += "isStraight: ${isFlush(cardCopy)}\n"
+                Timber.d(debug)
+                return Pair(cardCopy, true)
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    fun isThreeToStraightFlush(cards: List<Card>): Pair<List<Card>,Boolean> {
+        for (i in 0..4){
+            for (j in 0..4){
+                if(i != j){
+                    val cardsCopy = cards.toMutableList()
+                    cardsCopy[i] = Card(2,'s')
+                    cardsCopy[j] = Card(2,'h')
+                    if (isStraightFlush(cardsCopy)) {
+                        cardsCopy.remove(Card(2,'s'))
+                        cardsCopy.remove(Card(2,'h'))
+                        return Pair(cardsCopy, true)
+                    }
+                }
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    fun isFiveOfKind(cards: List<Card>) : Boolean {
+        val groups = getNonDeuceCards(cards).groupBy { it.rank }
+        val deuceCount = deuceCount(cards)
+        return groups.any { (it.value.size + deuceCount) ==  5}
+    }
+
+    fun isFourOfAKind(cards: List<Card>) : Pair<List<Card>,Boolean> {
+        val groups = getNonDeuceCards(cards).groupBy { it.rank }
+        val deuceCount = deuceCount(cards)
+        val isFourOfAKind = groups.any { (it.value.size + deuceCount) ==  4}
+        return if(isFourOfAKind){
+            val nonDeuces = groups.maxByOrNull { it.value.size }?.value?.toMutableList()
+            nonDeuces?.addAll(getDeuceCards(cards))
+            Pair(nonDeuces ?: emptyList(),true)
+        } else {
+            Pair(emptyList(), false)
+        }
+    }
+
+    fun isFullHouse(cards: List<Card>) : Boolean {
+        val groups = getNonDeuceCards(cards).groupBy { it.rank }
+        return when(groups.size){
+            1,
+            2 -> { groups.any { it.value.size != 4 } }
+            else -> false
+        }
+    }
+
+    fun isFlush(cards: List<Card>): Boolean {
+        val noDeuce = getNonDeuceCards(cards)
+        val suit = noDeuce[0].suit
+        if (noDeuce.drop(1).all { it.suit == suit }) return true
+        return false
+    }
+
+    fun isFourToFlush(cards: List<Card>): Pair<List<Card>,Boolean> {
+        val suit = cards.groupBy { it.suit }.toSortedMap().firstKey()
+        for(i in 0..4) {
+            val cardCopy = cards.toMutableList()
+            cardCopy[i] = Card(2,suit)
+            if (isFlush(cardCopy)) {
+                cardCopy.remove(Card(2,suit))
+                return Pair(cardCopy, true)
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    fun removePairs(cards: List<Card>) : List<Card>{
+        return cards.distinctBy { it.rank }
+    }
+
+    fun isStraightHelper(cards: List<Card>): Boolean {
+        val sorted = removePairs(getNonDeuceCards(cards).sortedBy { it.rank })
+        var deuceCount = deuceCount(cards)
+        var index = 0
+        var count = 0
+        var lowerBoundCard = sorted[index].rank
+
+        while (count < 5) {
+            if(index < sorted.size - 1 && lowerBoundCard == sorted[index+1].rank-1){
+                // next card is part of straight
+                lowerBoundCard = sorted[index+1].rank
+                index += 1
+            } else{
+                // use a deuce
+                deuceCount -= 1
+                if(deuceCount<0)
+                    break
+                lowerBoundCard += 1
+            }
+            count += 1
+        }
+        return count == 4
+    }
+
+    fun isStraight(cards: List<Card>) : Boolean{
+        val straight = isStraightHelper(cards)
+        var aceLowStraight = false
+        if(!straight){
+            aceLowStraight = isStraightHelper(makeAceLow(cards))
+            makeAceHigh(cards)
+        }
+        return straight || aceLowStraight
+    }
+
+    fun isFourToOutsideStraight(cards: List<Card>): Pair<List<Card>,Boolean> {
+        val sorted = cards.sortedBy { it.rank }
+        for(i in 0..4) {
+            val cardCopy = sorted.toMutableList()
+            cardCopy[i] = Card(2,'c')
+            if(isStraight(cardCopy)
+                    && cardCopy[0].rank > 2
+                    && cardCopy[4].rank < 14
+                    && (i == 0 || i == 4) ){
+                cardCopy.remove(Card(2,'c'))
+                return Pair(cardCopy, true)
+            }
+        }
+        //todo this doesnt work
+        return Pair(emptyList(),false)
+    }
+
+    fun isFourToInsideStraightAndDontNeedDeuce(cards: List<Card>): Pair<List<Card>,Boolean> {
+        val sorted = cards.sortedBy { it.rank }
+        for(i in 0..4) {
+            val cardCopy = sorted.toMutableList()
+            cardCopy[i] = Card(2,'c')
+            if(isStraight(cardCopy) &&
+                    (i != 0 || i != 4) &&
+                    (i != 1)){
+                cardCopy.remove(Card(2,'c'))
+                return Pair(cardCopy,true)
+            }
+        }
+        // todo this doesnt work
+        return Pair(emptyList(),false)
+    }
+
+    fun isThreeOfAKind(cards: List<Card>): Pair<List<Card>,Boolean> {
+        val groups = getNonDeuceCards(cards).groupBy { it.rank }
+        val isThreeOfAKind = groups.any { it.value.size == 3 || (it.value.size + deuceCount(cards) == 3) }
+        return if(isThreeOfAKind){
+            val nonDeuces = groups.maxByOrNull { it.value.size }?.value?.toMutableList()
+            nonDeuces?.addAll(getDeuceCards(cards))
+            Pair(nonDeuces ?: emptyList(),true)
+        } else {
+            Pair(emptyList(),false)
+        }
+    }
+
+    fun isPair(cards: List<Card>): Pair<List<Card>,Boolean>{
+        // ASSUMING NO DEUCES
+        // this returns the highest pair in two pairs
+        val sorted = cards.sortedByDescending { it.rank }
+        for (i in 0..4){
+            for (j in 0..4){
+                if(i != j && sorted[i].rank == sorted[j].rank){
+                    return Pair(listOf(sorted[i],sorted[j]),true)
+                }
+            }
+        }
+        return Pair(emptyList(),false)
+    }
+
+    private fun getNonDeuceCards(cards: List<Card>) : List<Card> {
+        return cards.filter { it.rank != 2 }
+    }
+
+    private fun getDeuceCards(cards: List<Card>) : List<Card> {
+        return cards.filter { it.rank == 2 }
+    }
+
+    fun deuceCount(cards: List<Card>) : Int {
+        return cards.filter { it.rank == 2 }.count()
+    }
 }

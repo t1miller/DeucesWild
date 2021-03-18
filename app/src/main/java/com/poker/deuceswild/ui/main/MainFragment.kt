@@ -22,6 +22,7 @@ import com.poker.deuceswild.StrategySuggestionRecyclerViewAdapter
 import com.poker.deuceswild.ai.AIDecision
 import com.poker.deuceswild.ai.Strategy
 import com.poker.deuceswild.cardgame.Card
+import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
 import com.poker.deuceswild.handstatui.StatDialogUtils
 import com.poker.deuceswild.log.LogManager
@@ -227,13 +228,22 @@ class MainFragment : Fragment() {
                     viewModel.evaluateHand(getCardsToKeepBooleanArray(),getCardsToKeep())
                 }
                 MainViewModel.GameState.EVALUATE_NO_WIN -> {
+                    // user lost
                     viewModel.gameState.value = MainViewModel.GameState.START
-//                    viewModel.deal()
                 }
                 MainViewModel.GameState.EVALUATE_WIN -> {
                     // user is opting out of double down
-//                    viewModel.collect()
+                    SoundManager.playSound(requireContext(), SoundManager.SoundType.COLLECTING_COINS)
+                    viewModel.collectNoBonus()
                     viewModel.gameState.value = MainViewModel.GameState.START
+                }
+                MainViewModel.GameState.BONUS -> {
+                    // todo add some fun music for bonus mode
+                    viewModel.gameState.value = MainViewModel.GameState.START
+//                    CardUiUtils.showCardBacks(cardViews)
+                    CardUiUtils.makeCardsVisibile(cardViews)
+                    viewModel.deal()
+                    flip(CardFlipState.FULL_FLIP, viewModel.hand.value?.toList() ?: emptyList())
                 }
                 else -> {}
             }
@@ -250,6 +260,16 @@ class MainFragment : Fragment() {
 
         doubleButton.setOnClickListener {
             viewModel.gameState.value = MainViewModel.GameState.BONUS
+        }
+
+        redButton.setOnClickListener {
+            viewModel.collectBonus(true)
+            showBonusDoneUi()
+        }
+
+        blackButton.setOnClickListener {
+            viewModel.collectBonus(false)
+            showBonusDoneUi()
         }
 
         showTip.setOnCheckedChangeListener { _, isChecked ->
@@ -280,6 +300,9 @@ class MainFragment : Fragment() {
             if(viewModel.gameState.value == MainViewModel.GameState.DEAL){
                 if(!isChecked){
                     CardUiUtils.unhighlightHeldCards(holdViews)
+                } else {
+                    val strategy = Strategy.bestStrategy(viewModel.hand.value ?: emptyList())
+                    CardUiUtils.highlightHeldCards(holdViews,strategy.fullCards, strategy.winningCards)
                 }
             }
         }
@@ -316,6 +339,9 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        SoundManager.load(requireActivity())
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.gameState.observe(viewLifecycleOwner, Observer { state ->
             updateUi(state)
@@ -328,6 +354,11 @@ class MainFragment : Fragment() {
                 if(showTip.isChecked) {
                     showFullPaytableColumns()
                     showActivePaytableColumns()
+                    showTipsView()
+                } else if (training.isChecked) {
+                    showFullPaytableColumns()
+                    showActivePaytableColumns()
+                    showTrainingView()
                 }
             }
         })
@@ -353,12 +384,12 @@ class MainFragment : Fragment() {
         })
 
         viewModel.aiDecision.observe(viewLifecycleOwner, Observer { decision ->
-            val sortedHands = decision.sortedRankedHands
             aiDecision = decision
-            if(autoHold.isChecked) {
-                CardUiUtils.highlightHeldCards(holdViews, viewModel.hand.value ,sortedHands[0].first)
-            }
-            SoundManager.playSound(requireActivity(), SoundManager.SoundType.CHIME)
+//            val sortedHands = decision.sortedRankedHands
+//            if(autoHold.isChecked && viewModel.gameState.value == MainViewModel.GameState.DEAL) {
+//                CardUiUtils.highlightHeldCards(holdViews, viewModel.hand.value, sortedHands[0].first)
+//                SoundManager.playSound(requireActivity(), SoundManager.SoundType.CHIME)
+//            }
             enableHandStats()
             enableDealButtonUi()
         })
@@ -369,6 +400,8 @@ class MainFragment : Fragment() {
         when (state) {
             MainViewModel.GameState.START -> {
                 handStatsButton.isEnabled = true
+                CardUiUtils.unhighlightHeldCards(holdViews)
+                CardUiUtils.makeCardsVisibile(cardViews)
                 disableHandStats()
                 clearWinningCardsUi()
                 unHiglightRowsUi()
@@ -376,6 +409,7 @@ class MainFragment : Fragment() {
                 clearTrainingView()
                 enableBetting()
                 showNormalButtonsUi()
+                updateTrainingViewStats()
                 flip(CardFlipState.FACE_DOWN, hand)
             }
             MainViewModel.GameState.DEAL -> {
@@ -390,6 +424,7 @@ class MainFragment : Fragment() {
                     )
                 }
                 showTapToHold()
+                disableBetting()
             }
             MainViewModel.GameState.EVALUATE_WIN -> {
                 flip(CardFlipState.FULL_FLIP, hand)
@@ -397,14 +432,20 @@ class MainFragment : Fragment() {
                 CardUiUtils.unhighlightHeldCards(holdViews)
                 showBonusAndCollect()
                 disableBetting()
+                hideTapToHold()
+                SoundManager.playSound(requireContext(),viewModel.eval.value?.first ?: Evaluate.Hand.NOTHING)
             }
             MainViewModel.GameState.EVALUATE_NO_WIN -> {
                 flip(CardFlipState.FULL_FLIP, hand)
                 updateTrainingView(getCardsToKeep())
                 CardUiUtils.unhighlightHeldCards(holdViews)
+                hideTapToHold()
+                SoundManager.playSound(requireContext(),viewModel.eval.value?.first ?: Evaluate.Hand.NOTHING)
             }
             MainViewModel.GameState.BONUS -> {
                 showRedAndBlack()
+                CardUiUtils.unhighlightHeldCards(holdViews)
+                clearWinningTextUi()
             }
         }
     }
@@ -452,31 +493,52 @@ class MainFragment : Fragment() {
     }
 
     private fun updateTrainingView(heldCards: List<Card>) {
-        val bestDecision = aiDecision?.sortedRankedHands?.get(0)?.first ?: emptyList()
-        if(bestDecision.toMutableSet() ==  heldCards.toMutableSet() ||
-            Strategy.bestStrategy(viewModel.originalHand).winningCards.toMutableSet() == heldCards.toMutableSet()) {
-            trainingWrongText.visibility = View.INVISIBLE
-            trainingCorrectText.visibility = View.VISIBLE
-            LogManager.increaseCorrectCount()
-        } else {
-            trainingWrongText.visibility = View.VISIBLE
-            trainingCorrectText.visibility = View.INVISIBLE
-            LogManager.increaseIncorrectCount()
+        if (training.isChecked) {
+            val bestDecisionAi = aiDecision?.sortedRankedHands?.get(0)?.first ?: emptyList()
+            val bestDecisionStrategy = Strategy.bestStrategy(viewModel.originalHand)
+
+            if (bestDecisionAi.toMutableSet() == heldCards.toMutableSet() ||
+                    bestDecisionStrategy.winningCards.toMutableSet() == heldCards.toMutableSet()) {
+                Timber.d("Training correct optimal = ${bestDecisionStrategy.winningCards.toMutableSet()} your = ${heldCards.toMutableSet()}")
+                trainingWrongText.visibility = View.INVISIBLE
+                trainingCorrectText.visibility = View.VISIBLE
+                LogManager.increaseCorrectCount()
+                LogManager.increaseOptimalWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
+            } else {
+                Timber.d("Training incorrect optimal = ${bestDecisionStrategy.winningCards.toMutableSet()} your = ${heldCards.toMutableSet()}")
+                Timber.d("optimal ranks: ${bestDecisionStrategy.winningCards.toMutableSet().joinToString { it.rank.toString() }} your ranks: ${heldCards.toMutableSet().joinToString { it.rank.toString() }}")
+                trainingWrongText.visibility = View.VISIBLE
+                trainingCorrectText.visibility = View.INVISIBLE
+                LogManager.increaseIncorrectCount()
+                val bestDecisionHand = Deck.draw5Random(bestDecisionStrategy.winningCards.toMutableList())
+                val bestDecisionEval = Evaluate.evaluate(bestDecisionHand)
+                LogManager.increaseOptimalWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),bestDecisionEval.first,1))
+            }
+            LogManager.increaseTrainingWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
+
+            CardUiUtils.highlightHeldCards(trainingHoldViews, bestDecisionStrategy.fullCards, bestDecisionStrategy.winningCards)
+            CardUiUtils.showCards(trainingCardViews, bestDecisionStrategy.fullCards)
+            updateTrainingViewStats()
         }
-        CardUiUtils.highlightHeldCards(trainingHoldViews, aiDecision?.hand,bestDecision)
-        CardUiUtils.showCards(trainingCardViews,aiDecision?.hand)
+    }
+
+    private fun updateTrainingViewStats() {
         val stats = LogManager.getStatistics()
         trainingCorrectCountText.text = getString(R.string.correct_training, stats?.correctCount ?: 0)
         trainingWrongCountText.text = getString(R.string.wrong_training, stats?.wrongCount ?: 0)
-        optimalText.text = getString(R.string.optimal, 10)
         stats?.let {
-            accuracyText.text = getString(R.string.accuracy,it.correctCount.toFloat()/(it.wrongCount.toFloat() + it.correctCount))
+            accuracyText.text = getString(R.string.accuracy, LogManager.getAccuracy())
+            winningsText.text = getString(R.string.winnings, stats.trainingWonLoss)
+            optimalText.text = getString(R.string.optimal, stats.trainingOptimalWonLoss)
         }
+
     }
 
     private fun clearTrainingView() {
         CardUiUtils.showCardBacks(trainingCardViews)
         CardUiUtils.unhighlightHeldCards(trainingHoldViews)
+        trainingWrongText.visibility = View.INVISIBLE
+        trainingCorrectText.visibility = View.INVISIBLE
     }
 
     private fun disableHandStats() {
@@ -559,6 +621,11 @@ class MainFragment : Fragment() {
         gameInstructions.visibility = View.VISIBLE
     }
 
+    private fun hideTapToHold() {
+        gameInstructions.text = getString(R.string.tap_card)
+        gameInstructions.visibility = View.INVISIBLE
+    }
+
     private fun showBonusAndCollect() {
         dealButton.text = getString(R.string.collect_button)
         doubleButton.isEnabled = true
@@ -569,19 +636,28 @@ class MainFragment : Fragment() {
         bonusButtonsLayout.visibility = View.VISIBLE
         gameInstructions.visibility = View.VISIBLE
         gameInstructions.text = getString(R.string.guess_the_color)
+        CardUiUtils.showCardBacks(cardViews)
+        cardLayouts[2].isAutoFlipBack = false
+        cardLayouts[2].flipTheView()
+        for(i in 0..4){
+            if(i!=2){
+                cardViews[i].visibility = View.INVISIBLE
+            }
+        }
     }
 
     private fun showBonusDoneUi() {
         cardViews[2].setImageResource(CardUiUtils.cardToImage(viewModel.hand.value?.get(2)))
         cardLayouts[2].flipTheView()
 
-        // if win show chicken dinner
-//        if (viewModel.wonLostMoney.value!! > 0) {
-//            handEvalText.text = getString(R.string.bonus_correct_guess)
-//        } else {
-//            handEvalText.text = getString(R.string.bonus_wrong_guess)
-//        }
+        if (viewModel.wonLoss.value ?: 0 > 0) {
+            gameInstructions.text = getString(R.string.bonus_correct_guess)
+        } else {
+            gameInstructions.text = getString(R.string.bonus_wrong_guess)
+        }
+        enableBetting()
         showNormalButtonsUi()
+        gameInstructions.visibility = View.VISIBLE
     }
 
     private fun showNormalButtonsUi() {
@@ -676,7 +752,9 @@ class MainFragment : Fragment() {
 
 
     private fun flip(state: CardFlipState, cards: List<Card>) {
-        SoundManager.playSound(requireActivity(), SoundManager.SoundType.FLIP)
+        if(SettingsUtils.isFlipSoundEnabled(requireContext())){
+            SoundManager.playSound(requireActivity(), SoundManager.SoundType.FLIP)
+        }
 
         when(state) {
             CardFlipState.FACE_DOWN -> {

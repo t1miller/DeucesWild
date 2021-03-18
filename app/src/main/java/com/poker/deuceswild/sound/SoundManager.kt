@@ -1,8 +1,9 @@
-package com.poker.deuceswild.sound//package com.poker.deuceswild.sound
+package com.poker.deuceswild.sound
 
 import android.content.Context
 import android.media.SoundPool
 import com.poker.deuceswild.R
+import com.poker.deuceswild.cardgame.Evaluate
 import com.poker.deuceswild.settings.SettingsUtils
 
 
@@ -64,41 +65,53 @@ object SoundManager {
             if(soundPool == null){
                 load(context)
             }
+//
+//
+//            var soundTypeT = sound
+//            if(SettingsUtils.isSheepModeEnabled(context)){
+//                when(sound) {
+//                    SoundType.SHUFFLE -> soundTypeT = SoundType.SHUFFLE_SHEEP
+//                    SoundType.BIG_WIN -> soundTypeT = SoundType.BIG_WIN_SHEEP
+//                    SoundType.MEDIUM_WIN -> soundTypeT = SoundType.MEDIUM_WIN_SHEEP
+//                    SoundType.INSERT_COIN -> soundTypeT = SoundType.INSERT_COIN_SHEEP
+//                    SoundType.COLLECTING_COINS -> soundTypeT = SoundType.COLLECTING_COINS_SHEEP
+//                    else -> {}
+//                }
+//            }
+//
 
-            var soundTypeT = sound
-            if(SettingsUtils.isSheepModeEnabled(context)){
-                when(sound) {
-                    SoundType.SHUFFLE -> soundTypeT = SoundType.SHUFFLE_SHEEP
-                    SoundType.BIG_WIN -> soundTypeT = SoundType.BIG_WIN_SHEEP
-                    SoundType.MEDIUM_WIN -> soundTypeT = SoundType.MEDIUM_WIN_SHEEP
-                    SoundType.INSERT_COIN -> soundTypeT = SoundType.INSERT_COIN_SHEEP
-                    SoundType.COLLECTING_COINS -> soundTypeT = SoundType.COLLECTING_COINS_SHEEP
-                    else -> {}
-                }
-            }
-
-            val soundId = soundTypeToId[soundTypeT] ?: DEFAULT_ID
+            val soundId = soundTypeToId[sound] ?: DEFAULT_ID
 
             soundPool?.play(soundId, 1F, 1F, 0, 0, 1F)
         }
     }
 
-//    fun playSound(context: Context, eval: Evaluate.Hand) {
-//        when(eval) {
-//            Evaluate.Hand.NATURAL_ROYAL_FLUSH,
-//            Evaluate.Hand.STRAIGHT_FLUSH,
-//            Evaluate.Hand.FOUR_OF_A_KIND,
-//            Evaluate.Hand.FULL_HOUSE,
-//            Evaluate.Hand.FLUSH,
-//            Evaluate.Hand.STRAIGHT -> {
-//                return playSound(context, SoundType.BIG_WIN)
-//            }
-//            Evaluate.Hand.THREE_OF_A_KIND,
-//            Evaluate.Hand.TWO_PAIRS,
-//            Evaluate.Hand.JACKS_OR_BETTER -> {
-//                return playSound(context, SoundType.MEDIUM_WIN)
-//            }
-//            Evaluate.Hand.NOTHING -> {/*no sound*/}
-//        }
-//    }
+    fun playSound(context: Context, eval: Evaluate.Hand) {
+        when(eval) {
+            Evaluate.Hand.SEQUENTIAL_ROYAL_FLUSH,
+            Evaluate.Hand.NATURAL_ROYAL_FLUSH,
+            Evaluate.Hand.FOUR_DEUCES,
+            Evaluate.Hand.WILD_ROYAL_FLUSH,
+            Evaluate.Hand.FIVE_OF_A_KIND,
+            Evaluate.Hand.STRAIGHT_FLUSH,
+            Evaluate.Hand.FOUR_OF_A_KIND,
+            Evaluate.Hand.FULL_HOUSE,
+            Evaluate.Hand.FLUSH -> {
+                if(SettingsUtils.isWinSoundEnabled(context)){
+                    return playSound(context, SoundType.BIG_WIN)
+                }
+            }
+            Evaluate.Hand.STRAIGHT,
+            Evaluate.Hand.THREE_OF_A_KIND -> {
+                if(SettingsUtils.isWinSoundEnabled(context)){
+                    return playSound(context, SoundType.MEDIUM_WIN)
+                }
+            }
+            Evaluate.Hand.NOTHING -> {
+                if(SettingsUtils.isLoseSoundEnabled(context)){
+                    return playSound(context, SoundType.SAD_TROMBONE_3_WOMP)
+                }
+            }
+        }
+    }
 }

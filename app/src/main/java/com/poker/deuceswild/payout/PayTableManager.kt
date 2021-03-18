@@ -1,6 +1,9 @@
 package com.poker.deuceswild.payout
 
+import com.poker.deuceswild.cardgame.Card
+import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
+import timber.log.Timber
 
 
 enum class PayTableType(val readableName: String) {
@@ -179,5 +182,18 @@ object PayTableManager {
     fun getPayTableRow(payTableType: PayTableType, index: Int) : List<Int> {
         val hand = Evaluate.Hand.values()[index]
         return getPayTableRow(payTableType, hand)
+    }
+
+    fun calculateBonusPayout(bet: Int?, card: Card?, isGuessRed: Boolean) : Int {
+        if(card == null || bet == null) return -1
+        val isCorrectGuess = Deck.isSuitRed(card.suit) && isGuessRed || !Deck.isSuitRed(card.suit) && !isGuessRed
+
+        Timber.d("Calculate Bonus: card: %s guess: %s isCorrect: %s", card.toString(), if (!isGuessRed) "black" else "red", isCorrectGuess)
+
+        return if (isCorrectGuess) {
+            bet*2
+        } else {
+            -1*bet
+        }
     }
 }

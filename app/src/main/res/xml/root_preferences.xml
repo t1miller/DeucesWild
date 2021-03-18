@@ -13,29 +13,36 @@
 
         <SwitchPreferenceCompat
             app:dependency="sound"
-            app:key="sheep_mode"
-            app:defaultValue="false"
-            app:summaryOff="Sheep mode is off"
-            app:summaryOn="Sheep mode is on"
-            app:title="Sheep Mode" />
+            app:key="sound_win"
+            app:defaultValue="true"
+            app:summaryOff="Win sound off"
+            app:summaryOn="Win sound is on"
+            app:title="Win Sound" />
 
-        <SeekBarPreference
-            android:max="15000"
-            app:defaultValue="5000"
-            app:key="montecarlo_trials"
-            app:min="500"
-            app:showSeekBarValue="true"
-            app:summary="@string/autohold_description"
-            app:title="Autohold Accuracy" />
 
-        <SeekBarPreference
-            android:max="20"
-            app:defaultValue="10"
-            app:key="training_strictness"
-            app:min="0"
-            app:showSeekBarValue="true"
-            app:summary="@string/training_strict_description"
-            app:title="Training Strictness" />
+        <SwitchPreferenceCompat
+            app:dependency="sound"
+            app:key="sound_lose"
+            app:defaultValue="true"
+            app:summaryOff="Lose sound is off"
+            app:summaryOn="Lose sound is on"
+            app:title="Lose Sound" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sound"
+            app:key="sound_flip"
+            app:defaultValue="true"
+            app:summaryOff="Card Flip sound is off"
+            app:summaryOn="Card Flip sound is on"
+            app:title="Flip Sound" />
+
+        <SwitchPreferenceCompat
+            app:dependency="sound"
+            app:key="sound_bonus"
+            app:defaultValue="true"
+            app:summaryOff="Bonus sounds are off"
+            app:summaryOn="Bonus sounds are on"
+            app:title="Bonus Sound" />
 
         <Preference
             android:title="Share Stats"
@@ -53,19 +60,19 @@
 
     <PreferenceCategory app:title="@string/money_header">
 
-        <Preference
-            android:title="Reset Money"
-            android:key="reset_money"
-            android:summary="Resets your money to the default (4000)"
-            />
-
         <ListPreference
-            app:defaultValue="9/6 – 99.54%"
+            app:defaultValue="100.76 Full Pay"
             app:entries="@array/payout_table_type_entries"
             app:entryValues="@array/payout_table_type_entries"
             app:key="payout_table"
             app:title="@string/payout_table_title"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:title="Reset Money"
+            android:key="reset_money"
+            android:summary="Resets your money to the default (4000)"
+            />
 
 
     </PreferenceCategory>

@@ -43,12 +43,12 @@
     <string name="wrong">Wrong</string>
     <string name="wrong_training">Wrong: %d</string>
     <string name="hold">Hold</string>
-    <string name="accuracy">Accuracy: %.2f</string>
-    <string name="winnings">Winnings: %d</string>
-    <string name="optimal">Optimal: %d</string>
+    <string name="accuracy">Accuracy: %.1f</string>
+    <string name="winnings">Your winnings: $%d</string>
+    <string name="optimal">Optimal winnings: $%d</string>
 
     <!--   Bonus round stuff   -->
-    <string name="bonus_correct_guess">Chicken Dinner!</string>
+    <string name="bonus_correct_guess">Bonus Win!</string>
     <string name="bonus_wrong_guess">Wrong Guess!</string>
     <string name="guess_the_color">Guess the color?</string>
 

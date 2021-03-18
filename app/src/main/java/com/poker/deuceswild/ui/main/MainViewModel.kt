@@ -13,6 +13,7 @@ import com.poker.deuceswild.log.Game
 import com.poker.deuceswild.log.LogManager
 import com.poker.deuceswild.payout.PayTableManager
 import com.poker.deuceswild.settings.SettingsUtils
+import com.poker.deuceswild.sound.SoundManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -66,7 +67,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Deck.newDeck()
         hand.value = Deck.draw5()
         gameState.value = GameState.DEAL
-        getBestHand(3000)
+        getBestHand(2000)
     }
 
     fun evaluateHand(cardsToKeep: BooleanArray, cards: List<Card>) {
@@ -87,24 +88,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
         eval.value = Evaluate.evaluate(hand.value ?: emptyList())
         if(eval.value?.first == Evaluate.Hand.NOTHING){
+            // user won nothing, collect and log
+            val wonLost = PayTableManager.getPayOut(SettingsUtils.getPayoutTable(getApplication()),eval.value?.first, bet.value)
+            LogManager.addStatistic(Game(bet.value, wonLost, eval.value?.first?.readableName, originalHand, lastCardsKept, hand.value))
+            collect(wonLost)
             gameState.value = GameState.EVALUATE_NO_WIN
         } else {
             gameState.value = GameState.EVALUATE_WIN
         }
+    }
 
+    private fun collect(wonLost: Int) {
+        wonLoss.value = wonLost
+        totalMoney.value = (totalMoney.value ?: 0) + wonLost
+    }
+
+    fun collectNoBonus() {
         val wonLost = PayTableManager.getPayOut(SettingsUtils.getPayoutTable(getApplication()),eval.value?.first, bet.value)
         LogManager.addStatistic(Game(bet.value, wonLost, eval.value?.first?.readableName, originalHand, lastCardsKept, hand.value))
         collect(wonLost)
     }
 
-    fun collect(wonLost: Int) {
-        wonLoss.value = wonLost
-        totalMoney.value = (totalMoney.value ?: 0) + wonLost
+    /**
+     *  C[2] is the index of the card to guess
+     */
+    fun collectBonus(isGuessRed: Boolean) {
+        Deck.newDeck()
+        val handFinal = hand.value?.toMutableList()
+        hand.value = Deck.draw5()
+
+        val tempPot = PayTableManager.getPayOut( SettingsUtils.getPayoutTable(getApplication()), eval.value?.first, bet.value)
+        val money = PayTableManager.calculateBonusPayout(tempPot, hand.value?.get(2), isGuessRed)
+
+        if(SettingsUtils.isBonusSoundEnabled(getApplication())){
+            if (money > 0) {
+                SoundManager.playSound(getApplication(), SoundManager.SoundType.ROOSTER_CROWING)
+            } else {
+                SoundManager.playSound(getApplication(), SoundManager.SoundType.SAD_TROMBONE_4_WOMP)
+            }
+        }
+
+        LogManager.addStatistic(Game(bet.value, money, eval.value?.first?.readableName, originalHand, lastCardsKept, handFinal))
+        collect(money)
     }
 
-    private fun getMoney() : Int {
-        return totalMoney.value ?: SettingsUtils.getMoney(getApplication())
-    }
+//    private fun getMoney() : Int {
+//        return totalMoney.value ?: SettingsUtils.getMoney(getApplication())
+//    }
 
     fun betOne() {
         bet.value = (bet.value ?: 0) % 5 + 1

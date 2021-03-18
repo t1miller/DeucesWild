@@ -52,6 +52,25 @@ object CardUiUtils {
 //        Timber.d("${card?.rank}")
         if(card == null) return R.drawable.cardback
         return when(card.rank) {
+            1 -> {
+                when(card.suit) {
+                    's' -> {
+                        R.drawable.ace_of_spades2
+                    }
+                    'h' -> {
+                        R.drawable.ace_of_hearts
+                    }
+                    'd' -> {
+                        R.drawable.ace_of_diamonds
+                    }
+                    'c' -> {
+                        R.drawable.ace_of_clubs
+                    }
+                    else -> {
+                        R.drawable.cardback
+                    }
+                }
+            }
             2 -> {
                 when(card.suit) {
                     's' -> {
@@ -66,9 +85,7 @@ object CardUiUtils {
                     'c' -> {
                         R.drawable.two_of_clubs
                     }
-                    else -> {
-                        -1
-                    }
+                    else -> R.drawable.cardback
                 }
             }
             3 -> {
@@ -86,7 +103,7 @@ object CardUiUtils {
                         R.drawable.three_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -105,7 +122,7 @@ object CardUiUtils {
                         R.drawable.four_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -124,7 +141,7 @@ object CardUiUtils {
                         R.drawable.five_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -143,7 +160,7 @@ object CardUiUtils {
                         R.drawable.six_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -162,7 +179,7 @@ object CardUiUtils {
                         R.drawable.seven_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -181,7 +198,7 @@ object CardUiUtils {
                         R.drawable.eight_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -200,7 +217,7 @@ object CardUiUtils {
                         R.drawable.nine_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -219,7 +236,7 @@ object CardUiUtils {
                         R.drawable.ten_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -238,7 +255,7 @@ object CardUiUtils {
                         R.drawable.jack_of_clubs2
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -257,7 +274,7 @@ object CardUiUtils {
                         R.drawable.queen_of_clubs2
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -276,7 +293,7 @@ object CardUiUtils {
                         R.drawable.king_of_clubs2
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
@@ -295,12 +312,12 @@ object CardUiUtils {
                         R.drawable.ace_of_clubs
                     }
                     else -> {
-                        -1
+                        R.drawable.cardback
                     }
                 }
             }
             else -> {
-                -1
+                R.drawable.cardback
             }
         }
 

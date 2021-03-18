@@ -27,6 +27,8 @@ object LogManager {
         0,
         0,
         0,
+            0,
+            0,
         mutableListOf(
             EvalCount(Evaluate.Hand.SEQUENTIAL_ROYAL_FLUSH.readableName,0),
             EvalCount(Evaluate.Hand.NATURAL_ROYAL_FLUSH.readableName,0),
@@ -130,6 +132,14 @@ object LogManager {
         statistics?.wrongCount = (statistics?.wrongCount ?: 0) + 1
     }
 
+    fun increaseTrainingWonLoss(amount: Int) {
+        statistics?.trainingWonLoss = (statistics?.trainingWonLoss ?: 0) + amount
+    }
+
+    fun increaseOptimalWonLoss(amount: Int) {
+        statistics?.trainingOptimalWonLoss = (statistics?.trainingOptimalWonLoss ?: 0) + amount
+    }
+
     fun getAccuracy() : Double{
         val totalCount = (statistics?.correctCount ?: 0) + (statistics?.wrongCount ?: 0)
         return if (totalCount > 0) (statistics?.correctCount ?: 0).div(totalCount.toDouble())*100.0 else 0.0
@@ -184,6 +194,8 @@ object LogManager {
 data class Statistics(
     var correctCount: Int,
     var wrongCount: Int,
+    var trainingWonLoss: Int,
+    var trainingOptimalWonLoss: Int,
     var totalWon: Int,
     var totalLost: Int,
     val evalCounts: MutableList<EvalCount>,

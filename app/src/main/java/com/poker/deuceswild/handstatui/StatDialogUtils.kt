@@ -39,7 +39,7 @@ object StatDialogUtils {
         cardViews.add(dialog.findViewById(R.id.card5))
 
         fullHand.forEachIndexed { index, card ->
-            cardViews[index].setImageResource(CardUiUtils.cardToImage(card))
+            cardViews[index].setImageResource(CardUiUtils.cardToImage(activity,card))
             if(selectedHand != null && !selectedHand.contains(card)) {
                 cardViews[index].setColorFilter(
                     ContextCompat.getColor(activity,

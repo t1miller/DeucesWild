@@ -16,6 +16,7 @@
 
     <!--  Settings  -->
     <string name="settings">Settings</string>
+    <string name="about">About</string>
     <string name="money_header">Money</string>
     <string name="general_header">General</string>
     <string name="training_strict_description">Increases strictness</string>
@@ -57,4 +58,15 @@
     <string name="loss">Lost: $%d</string>
     <string name="total">Credits: $%d</string>
     <string name="expected_value">$%.3f</string>
+    <string name="home_button">Home</string>
+
+    <string name="deuces_wild_title">Deuces Wild</string>
+    <string name="deuces_definition">Deuces Wild is a variation of video poker in which all twos are wild. (Wild cards substitute for any other card in the deck in order to make a better poker hand). In Deuces Wild, the payout for a four of a kind makes up approximately ⅓ of the payback percentage of the game, and a four of a kind occurs on average approximately every fifteen hands. Deuces Wild can be found with pay schedules that offer a theoretical return as high as 100.8 percent, when played with perfect strategy. This full-pay version is found only in Nevada. It is also available with other pay schedules that have lesser theoretical returns:\n-Wikipedia</string>
+    <string name="about_analysis_title">Analysis Mode</string>
+    <string name="about_analysis">Analysis mode enables the user to see the logic behind the decision making to enable learning. Simulations allow the user to run an analysis of the current hand by running 1000s of simulations involving that hand. </string>
+    <string name="about_training_title">Training Mode</string>
+    <string name="about_training">Compares the cards you held to an optimal hold strategy and keeps track of results. This immediate feedback from the optimal decision allows users to learn from their mistakes.</string>
+    <string name="about_feedback_title">Feedback</string>
+    <string name="about_feedback">Found a bug? Have a cool idea? Want a new statistic feature? Email me, I love feedback/suggestions!</string>
+
 </resources>

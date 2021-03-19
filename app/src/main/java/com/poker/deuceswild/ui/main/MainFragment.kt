@@ -185,6 +185,18 @@ class MainFragment : Fragment() {
         cardViews.add(view.findViewById(R.id.cardfront4))
         cardViews.add(view.findViewById(R.id.cardfront5))
 
+        val cardBackImage = SettingsUtils.getCardBack(requireContext())
+        val cardback1: View = view.findViewById(R.id.back1)
+        cardback1.findViewById<ImageView>(R.id.cardback1).setImageResource(cardBackImage)
+        val cardback2: View = view.findViewById(R.id.back2)
+        cardback2.findViewById<ImageView>(R.id.cardback1).setImageResource(cardBackImage)
+        val cardback3: View = view.findViewById(R.id.back3)
+        cardback3.findViewById<ImageView>(R.id.cardback1).setImageResource(cardBackImage)
+        val cardback4: View = view.findViewById(R.id.back4)
+        cardback4.findViewById<ImageView>(R.id.cardback1).setImageResource(cardBackImage)
+        val cardback5: View = view.findViewById(R.id.back5)
+        cardback5.findViewById<ImageView>(R.id.cardback1).setImageResource(cardBackImage)
+
         holdViews.add(view.findViewById(R.id.card1Hold))
         holdViews.add(view.findViewById(R.id.card2Hold))
         holdViews.add(view.findViewById(R.id.card3Hold))
@@ -250,11 +262,13 @@ class MainFragment : Fragment() {
         }
 
         betMaxButton.setOnClickListener {
+            SoundManager.playSound(requireActivity(), SoundManager.SoundType.INSERT_COIN)
             viewModel.betMax()
 //            StrategyTester.runSimulation()
         }
 
         betOneButton.setOnClickListener {
+            SoundManager.playSound(requireActivity(), SoundManager.SoundType.INSERT_COIN)
             viewModel.betOne()
         }
 
@@ -284,7 +298,7 @@ class MainFragment : Fragment() {
             }
         }
 
-        training.setOnCheckedChangeListener { buttonView, isChecked ->
+        training.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked) {
                 showTip.isChecked = false
                 showActivePaytableColumns()
@@ -296,7 +310,7 @@ class MainFragment : Fragment() {
             }
         }
 
-        autoHold.setOnCheckedChangeListener { buttonView, isChecked ->
+        autoHold.setOnCheckedChangeListener { _, isChecked ->
             if(viewModel.gameState.value == MainViewModel.GameState.DEAL){
                 if(!isChecked){
                     CardUiUtils.unhighlightHeldCards(holdViews)
@@ -517,7 +531,7 @@ class MainFragment : Fragment() {
             LogManager.increaseTrainingWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
 
             CardUiUtils.highlightHeldCards(trainingHoldViews, bestDecisionStrategy.fullCards, bestDecisionStrategy.winningCards)
-            CardUiUtils.showCards(trainingCardViews, bestDecisionStrategy.fullCards)
+            CardUiUtils.showCards(requireContext(), trainingCardViews, bestDecisionStrategy.fullCards)
             updateTrainingViewStats()
         }
     }
@@ -535,7 +549,7 @@ class MainFragment : Fragment() {
     }
 
     private fun clearTrainingView() {
-        CardUiUtils.showCardBacks(trainingCardViews)
+        CardUiUtils.showCardBacks(requireContext(),trainingCardViews)
         CardUiUtils.unhighlightHeldCards(trainingHoldViews)
         trainingWrongText.visibility = View.INVISIBLE
         trainingCorrectText.visibility = View.INVISIBLE
@@ -636,7 +650,7 @@ class MainFragment : Fragment() {
         bonusButtonsLayout.visibility = View.VISIBLE
         gameInstructions.visibility = View.VISIBLE
         gameInstructions.text = getString(R.string.guess_the_color)
-        CardUiUtils.showCardBacks(cardViews)
+        CardUiUtils.showCardBacks(requireContext(),cardViews)
         cardLayouts[2].isAutoFlipBack = false
         cardLayouts[2].flipTheView()
         for(i in 0..4){
@@ -647,7 +661,7 @@ class MainFragment : Fragment() {
     }
 
     private fun showBonusDoneUi() {
-        cardViews[2].setImageResource(CardUiUtils.cardToImage(viewModel.hand.value?.get(2)))
+        cardViews[2].setImageResource(CardUiUtils.cardToImage(requireContext(),viewModel.hand.value?.get(2)))
         cardLayouts[2].flipTheView()
 
         if (viewModel.wonLoss.value ?: 0 > 0) {
@@ -769,7 +783,7 @@ class MainFragment : Fragment() {
             CardFlipState.FACE_UP -> {
                 for (i in 0..4) {
                     cardLayouts[i].isAutoFlipBack = false
-                    cardViews[i].setImageResource(CardUiUtils.cardToImage(cards[i]))
+                    cardViews[i].setImageResource(CardUiUtils.cardToImage(requireContext(),cards[i]))
                     cardLayouts[i].flipTheView()
                     cardLayouts[i].setOnFlipListener { _, _ ->
                         enableDealButtonUi()
@@ -786,7 +800,7 @@ class MainFragment : Fragment() {
                         cardLayouts[i].flipTheView()
                         cardLayouts[i].setOnFlipListener { _, newCurrentSide ->
                             if (newCurrentSide == EasyFlipView.FlipState.BACK_SIDE) {
-                                cardViews[i].setImageResource(CardUiUtils.cardToImage(cards[i]))
+                                cardViews[i].setImageResource(CardUiUtils.cardToImage(requireContext(),cards[i]))
                             }
                             enableDealButtonUi()
                         }

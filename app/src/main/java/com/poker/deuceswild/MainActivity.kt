@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.google.android.gms.ads.MobileAds
+import com.poker.deuceswild.about.AboutFragment
 import com.poker.deuceswild.log.LogManager
 import com.poker.deuceswild.settings.SettingsFragment
 import com.poker.deuceswild.ui.main.MainFragment
@@ -48,12 +49,11 @@ class MainActivity : AppCompatActivity() {
 //            supportFragmentManager.beginTransaction().replace(R.id.container, SimulatorFragment(), SimulatorFragment.NAME).commitNow()
 //            true
 //        }
-//
-//        R.id.stats -> {
-//            loadStatFragment()
-//            true
-//        }
 
+        R.id.about -> {
+            supportFragmentManager.beginTransaction().replace(R.id.container, AboutFragment(), AboutFragment.NAME).commitNow()
+            true
+        }
         R.id.settings -> {
             supportFragmentManager.beginTransaction().replace(R.id.container, SettingsFragment(), SettingsFragment.NAME).commitNow()
             true

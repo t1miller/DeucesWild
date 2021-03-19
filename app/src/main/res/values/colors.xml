@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
+
+    <color name="colorYellowDark">#FFCC00</color>
     <color name="colorYellow">#FFFF00</color>
     <color name="colorYellowTransparent">#aaFFFF00</color>
     <color name="colorLightYellow">#FDFD96</color>
@@ -24,10 +26,14 @@
     <color name="colorPurple">#b19cd9</color>
     <color name="colorLightLightYellow">#fffdaf</color>
 
-<!--    background -->
+    <!--    background -->
     <color name="colorBackground1">#1f417e</color>
     <color name="colorBackground2">#3268ca</color>
-
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
+    <color name="black_overlay">#66000000</color>
 
 
 </resources>

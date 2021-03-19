@@ -41,11 +41,11 @@ class HandStatAdapter(private val context: Context, private val mStats: MutableL
 
         val evFormated = String.format("%.3f", stat.expectedValue).toDouble()
         viewHolder.expectedValueText.text = "$${evFormated}"
-        viewHolder.card1.setImageResource(CardUiUtils.cardToImage(stat.fullHand[0]))
-        viewHolder.card2.setImageResource(CardUiUtils.cardToImage(stat.fullHand[1]))
-        viewHolder.card3.setImageResource(CardUiUtils.cardToImage(stat.fullHand[2]))
-        viewHolder.card4.setImageResource(CardUiUtils.cardToImage(stat.fullHand[3]))
-        viewHolder.card5.setImageResource(CardUiUtils.cardToImage(stat.fullHand[4]))
+        viewHolder.card1.setImageResource(CardUiUtils.cardToImage(context,stat.fullHand[0]))
+        viewHolder.card2.setImageResource(CardUiUtils.cardToImage(context,stat.fullHand[1]))
+        viewHolder.card3.setImageResource(CardUiUtils.cardToImage(context,stat.fullHand[2]))
+        viewHolder.card4.setImageResource(CardUiUtils.cardToImage(context,stat.fullHand[3]))
+        viewHolder.card5.setImageResource(CardUiUtils.cardToImage(context,stat.fullHand[4]))
 
         unDimImageView(viewHolder.card1)
         unDimImageView(viewHolder.card2)

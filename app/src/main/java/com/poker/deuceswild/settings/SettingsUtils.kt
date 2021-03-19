@@ -1,9 +1,18 @@
 package com.poker.deuceswild.settings
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.poker.deuceswild.R
 import com.poker.deuceswild.payout.PayTableType
+import timber.log.Timber
 
 object SettingsUtils {
 
@@ -15,7 +24,9 @@ object SettingsUtils {
         const val SOUND_LOSE = true
         const val SOUND_BONUS = true
         const val PAYOUT_TABLE = "9/6 – 99.54%"
+        const val CHOOSE_CARDBACK = 0
     }
+
 
     object Keys{
         const val PAYOUT_TABLE = "payout_table"
@@ -28,36 +39,43 @@ object SettingsUtils {
         const val SOUND_LOSE = "sound_lose"
         const val SOUND_FLIP = "sound_flip"
         const val SOUND_BONUS = "sound_bonus"
-        const val TRAINING_STRICTNESS = "training_strictness"
+        const val CHOOSE_CARDBACK = "choose_cardback"
     }
-//
-//    fun getNumTrials(context: Context?) : Int{
-//        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//        return preferences.getInt(
-//            Keys.MONTE_CARLO_TRIALS,
-//            Defaults.MONTE_CARLO_TRIALS
-//        )
-//    }
-//
-//    fun resetNumTrials(context: Context?) {
-//        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//        with (preferences.edit()) {
-//            putInt(Keys.MONTE_CARLO_TRIALS, Defaults.MONTE_CARLO_TRIALS)
-//            apply()
-//        }
-//    }
-//
-//    fun getStrictness(context: Context?) : Int{
-//        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-//        return preferences.getInt(
-//            Keys.TRAINING_STRICTNESS,
-//            Defaults.TRAINING_STRICTNESS
-//        )
-//    }
+
+    object CardBacks{
+        val cardbacks = listOf(
+            R.drawable.card_back_default,
+            R.drawable.card_back_electric,
+            R.drawable.card_back_flower,
+            R.drawable.card_back_foot,
+            R.drawable.card_back_gay,
+            R.drawable.card_back_olympics,
+            R.drawable.card_back_pinstriped,
+            R.drawable.card_back_red,
+            R.drawable.card_back_t_rex
+        )
+    }
+
+    fun setCardBack(position: Int, context: Context) {
+        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        with(preferences.edit()) {
+            putInt(Keys.CHOOSE_CARDBACK, position)
+            apply()
+        }
+    }
+
+    fun getCardBack(context: Context) : Int {
+        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val position = preferences.getInt(
+            Keys.CHOOSE_CARDBACK,
+            Defaults.CHOOSE_CARDBACK
+        )
+        return CardBacks.cardbacks[position]
+    }
 
     fun setMoney(money: Int, context: Context) {
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        with (preferences.edit()) {
+        with(preferences.edit()) {
             putInt(Keys.TOTAL_MONEY, money)
             apply()
         }
@@ -74,32 +92,32 @@ object SettingsUtils {
     fun isWinSoundEnabled(context: Context) : Boolean{
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getBoolean(
-                Keys.SOUND_WIN,
-                Defaults.SOUND_WIN
+            Keys.SOUND_WIN,
+            Defaults.SOUND_WIN
         )
     }
 
     fun isLoseSoundEnabled(context: Context) : Boolean{
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getBoolean(
-                Keys.SOUND_LOSE,
-                Defaults.SOUND_LOSE
+            Keys.SOUND_LOSE,
+            Defaults.SOUND_LOSE
         )
     }
 
     fun isFlipSoundEnabled(context: Context) : Boolean{
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getBoolean(
-                Keys.SOUND_FLIP,
-                Defaults.SOUND_FLIP
+            Keys.SOUND_FLIP,
+            Defaults.SOUND_FLIP
         )
     }
 
     fun isBonusSoundEnabled(context: Context) : Boolean{
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getBoolean(
-                Keys.SOUND_BONUS,
-                Defaults.SOUND_BONUS
+            Keys.SOUND_BONUS,
+            Defaults.SOUND_BONUS
         )
     }
 
@@ -129,5 +147,37 @@ object SettingsUtils {
                 PayTableType._100_76
             }
         }
+    }
+
+    fun showChangeCardBackDialog(context: Context)  {
+
+        val dialog = Dialog(context)
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.change_card_dialog_layout)
+
+        val yesBtn = dialog.findViewById(R.id.btn_yes) as Button
+        yesBtn.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        val recyclerView = dialog.findViewById(R.id.recyclerView) as RecyclerView
+        val adapter = CardBackAdapter(object : CardTapped {
+            override fun onCardTapped(position: Int) {
+                setCardBack(position, context)
+                dialog.dismiss()
+                Toast.makeText(context, "cardback selected", Toast.LENGTH_LONG).show()
+            }
+        })
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.setHasFixedSize(true)
+
+        Timber.d("showing cardback dialog")
+        dialog.show()
+        val window: Window? = dialog.window
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 }

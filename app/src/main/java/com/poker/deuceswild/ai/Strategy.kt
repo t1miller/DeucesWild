@@ -343,7 +343,9 @@ object StrategyTester {
     }
 
     fun runSimulation(numTrials: Int = 1000){
-        test(numTrials, TestType.THREE_OF_A_KIND)
+//        test(numTrials, TestType.FOUR_STRAIGHT_FLUSH)
+//        test(numTrials, TestType.INSIDE_STRAIGHT)
+        test(numTrials, TestType.OUTSIDE_STRAIGHT)
     }
 
     fun List<Strategy.StrategyResponse>.print() {
@@ -384,6 +386,19 @@ object StrategyTester {
                     val (winningCards, isFourToStraightFlush) = Evaluate.isFourToStraightFlush(cards)
                     if(isFourToStraightFlush){
                         Timber.d("4 to straight flush: $cards")
+                    }
+                }
+            }
+            TestType.OUTSIDE_STRAIGHT -> {
+                for (i in 1..numTrials) {
+                    Deck.newDeck()
+                    val cards = Deck.draw5()
+
+                    val (_, isFourToStraight) = Evaluate.isFourToStraight(cards)
+                    val (_, isFourToInside) = Evaluate.isFourToInsideStraightAndDontNeedDeuce(cards)
+
+                    if(isFourToStraight && !isFourToInside){
+                        Timber.d("outside straight: $cards")
                     }
                 }
             }

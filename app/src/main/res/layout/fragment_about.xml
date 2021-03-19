@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/fullscreenBackgroundColor"
+    android:theme="@style/ThemeOverlay.DeucesWild.FullscreenContainer"
+    tools:context=".about.AboutFragment">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/deuces_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/deuces_wild_title"
+                android:textColor="?attr/fullscreenTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                style="@style/TextSubTitle"
+                android:id="@+id/fullscreen_content_parag"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/deuces_definition"
+                 />
+
+            <TextView
+                android:id="@+id/analysis"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/about_analysis_title"
+                android:textColor="?attr/fullscreenTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                style="@style/TextSubTitle"
+                android:id="@+id/about_analysis_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/about_analysis"
+                />
+
+            <TextView
+                android:id="@+id/training"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/about_training_title"
+                android:textColor="?attr/fullscreenTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                style="@style/TextSubTitle"
+                android:id="@+id/training_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/about_training"
+                />
+
+
+            <TextView
+                android:id="@+id/feedback"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/about_feedback_title"
+                android:textColor="?attr/fullscreenTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                style="@style/TextSubTitle"
+                android:id="@+id/feedback_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="start"
+                android:keepScreenOn="true"
+                android:text="@string/about_feedback"
+                />
+
+
+            <Button
+                android:layout_marginBottom="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:id="@+id/emailButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Email Me" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

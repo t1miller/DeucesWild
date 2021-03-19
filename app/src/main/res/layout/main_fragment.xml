@@ -203,7 +203,7 @@
                 android:id="@+id/card1"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
-                android:src="@drawable/cardback"
+                android:src="@drawable/card_back_default"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/card2"
                 app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
@@ -213,7 +213,7 @@
                 android:id="@+id/card2"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
-                android:src="@drawable/cardback"
+                android:src="@drawable/card_back_default"
                 app:layout_constraintStart_toEndOf="@id/card1"
                 app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
                 />
@@ -222,7 +222,7 @@
                 android:id="@+id/card3"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
-                android:src="@drawable/cardback"
+                android:src="@drawable/card_back_default"
                 app:layout_constraintStart_toEndOf="@id/card2"
                 app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
                 />
@@ -231,7 +231,7 @@
                 android:id="@+id/card4"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
-                android:src="@drawable/cardback"
+                android:src="@drawable/card_back_default"
                 app:layout_constraintStart_toEndOf="@id/card3"
                 app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
                 />
@@ -240,7 +240,7 @@
                 android:id="@+id/card5"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
-                android:src="@drawable/cardback"
+                android:src="@drawable/card_back_default"
                 app:layout_constraintStart_toEndOf="@id/card4"
                 app:layout_constraintTop_toTopOf="@id/trainingCardLayout"
                 />
@@ -396,7 +396,11 @@
             app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back" />
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back1"
+                layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
             <include layout="@layout/card_layout_front" />
@@ -417,7 +421,11 @@
             app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back" />
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back2"
+                layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
             <include layout="@layout/card_layout_front_two" />
@@ -438,7 +446,11 @@
             app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back" />
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back3"
+                layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
             <include layout="@layout/card_layout_front_three" />
@@ -459,7 +471,11 @@
             app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back" />
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back4"
+                layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
             <include layout="@layout/card_layout_front_four" />
@@ -480,7 +496,11 @@
             app:layout_constraintTop_toBottomOf="@id/gameInstructions">
 
             <!-- Back Layout Goes Here -->
-            <include layout="@layout/card_layout_back" />
+            <include
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/back5"
+                layout="@layout/card_layout_back" />
 
             <!-- Front Layout Goes Here -->
             <include layout="@layout/card_layout_front_five" />
@@ -587,7 +607,6 @@
         android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/table_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hand">
@@ -648,6 +667,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:gravity="center"
+        android:background="@drawable/table_background"
         app:layout_constraintTop_toBottomOf="@id/buttons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -709,7 +729,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-          `  <Button
+            <Button
                 android:id="@+id/simulate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -720,7 +740,7 @@
                 android:enabled="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Results" />`
+                android:text="Results" />
 
         </LinearLayout>
 
@@ -755,7 +775,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
+        ads:adSize="LARGE_BANNER"
         ads:adUnitId="ca-app-pub-7137320034166109/4056911260">
     </com.google.android.gms.ads.AdView>
 

@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardbacklayout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context="com.poker.deuceswild.main.MainFragment">
+    android:layout_height="wrap_content">
 
 
 <ImageView
@@ -14,7 +13,7 @@
     android:layout_width="70dp"
     android:layout_height="100dp"
     android:padding="2dp"
-    android:src="@drawable/cardback"
+    android:src="@drawable/card_back_default"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 

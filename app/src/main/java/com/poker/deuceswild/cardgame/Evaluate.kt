@@ -185,16 +185,16 @@ object Evaluate {
     }
 
     fun isFourToStraightFlush(cards: List<Card>) : Pair<List<Card>,Boolean> {
-        var debug = ""
+//        var debug = ""
         for(i in 0..4) {
             val cardCopy = cards.toMutableList()
             cardCopy[i] = Card(2,'s')
             if (isStraightFlush(cardCopy)) {
-                debug += "cards: $cardCopy\n"
+//                debug += "cards: $cardCopy\n"
                 cardCopy.remove(Card(2,'s'))
-                debug += "isflush: ${isFlush(cardCopy)}\n"
-                debug += "isStraight: ${isFlush(cardCopy)}\n"
-                Timber.d(debug)
+//                debug += "isflush: ${isFlush(cardCopy)}\n"
+//                debug += "isStraight: ${isFlush(cardCopy)}\n"
+//                Timber.d(debug)
                 return Pair(cardCopy, true)
             }
         }
@@ -303,6 +303,19 @@ object Evaluate {
             makeAceHigh(cards)
         }
         return straight || aceLowStraight
+    }
+
+    fun isFourToStraight(cards: List<Card>): Pair<List<Card>,Boolean> {
+        val sorted = cards.sortedBy { it.rank }
+        for(i in 0..4) {
+            val cardCopy = sorted.toMutableList()
+            cardCopy[i] = Card(2,'c')
+            if(isStraight(cardCopy)){
+                cardCopy.remove(Card(2,'c'))
+                return Pair(cardCopy, true)
+            }
+        }
+        return Pair(emptyList(),false)
     }
 
     fun isFourToOutsideStraight(cards: List<Card>): Pair<List<Card>,Boolean> {

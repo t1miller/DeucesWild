@@ -1,24 +1,28 @@
 package com.poker.deuceswild.ui.main
 
+import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.poker.deuceswild.R
 import com.poker.deuceswild.cardgame.Card
+import com.poker.deuceswild.settings.SettingsUtils
 
 
 object CardUiUtils {
 
-    fun showCards(cardViews: List<ImageView>?, fullHand: List<Card>?) {
+    fun showCards(context: Context, cardViews: List<ImageView>?, fullHand: List<Card>?) {
         fullHand?.forEachIndexed { index, card ->
-            cardViews?.get(index)?.setImageResource(cardToImage(card))
+            cardViews?.get(index)?.setImageResource(cardToImage(context,card))
+            cardViews?.get(index)?.setBackgroundResource(0)
         }
     }
 
-    fun showCardBacks(cardViews: List<ImageView>?) {
+    fun showCardBacks(context: Context, cardViews: List<ImageView>?) {
         cardViews?.forEach {
-            it.setImageResource(R.drawable.cardback)
-            it.setBackgroundResource(R.drawable.cardback)
+            val cardback = SettingsUtils.getCardBack(context)
+            it.setImageResource(cardback)
+            it.setBackgroundResource(cardback)
         }
     }
 
@@ -48,9 +52,9 @@ object CardUiUtils {
         holdsViews?.forEach { it.visibility = View.INVISIBLE }
     }
 
-    fun cardToImage(card: Card?) : Int{
+    fun cardToImage(context: Context, card: Card?) : Int{
 //        Timber.d("${card?.rank}")
-        if(card == null) return R.drawable.cardback
+        if(card == null) return SettingsUtils.getCardBack(context)
         return when(card.rank) {
             1 -> {
                 when(card.suit) {
@@ -67,7 +71,7 @@ object CardUiUtils {
                         R.drawable.ace_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -85,7 +89,7 @@ object CardUiUtils {
                     'c' -> {
                         R.drawable.two_of_clubs
                     }
-                    else -> R.drawable.cardback
+                    else -> SettingsUtils.getCardBack(context)
                 }
             }
             3 -> {
@@ -103,7 +107,7 @@ object CardUiUtils {
                         R.drawable.three_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -122,7 +126,7 @@ object CardUiUtils {
                         R.drawable.four_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -141,7 +145,7 @@ object CardUiUtils {
                         R.drawable.five_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -160,7 +164,7 @@ object CardUiUtils {
                         R.drawable.six_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -179,7 +183,7 @@ object CardUiUtils {
                         R.drawable.seven_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -198,7 +202,7 @@ object CardUiUtils {
                         R.drawable.eight_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -217,7 +221,7 @@ object CardUiUtils {
                         R.drawable.nine_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -236,7 +240,7 @@ object CardUiUtils {
                         R.drawable.ten_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -255,7 +259,7 @@ object CardUiUtils {
                         R.drawable.jack_of_clubs2
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -274,7 +278,7 @@ object CardUiUtils {
                         R.drawable.queen_of_clubs2
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -293,7 +297,7 @@ object CardUiUtils {
                         R.drawable.king_of_clubs2
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
@@ -312,12 +316,12 @@ object CardUiUtils {
                         R.drawable.ace_of_clubs
                     }
                     else -> {
-                        R.drawable.cardback
+                        SettingsUtils.getCardBack(context)
                     }
                 }
             }
             else -> {
-                R.drawable.cardback
+                SettingsUtils.getCardBack(context)
             }
         }
 

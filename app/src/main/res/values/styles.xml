@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Customize your theme here. -->
-<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--        <item name="colorPrimary">@color/colorPrimary</item>-->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-<!--        <item name="colorAccent">@color/colorAccent</item>-->
+        <!--        <item name="colorAccent">@color/colorAccent</item>-->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
@@ -15,7 +15,7 @@
         <item name="android:textSize">12sp</item>
         <item name="android:paddingStart">1dp</item>
         <item name="android:paddingEnd">3dp</item>
-<!--        <item name="android:layout_marginEnd">3dp</item>-->
+        <!--        <item name="android:layout_marginEnd">3dp</item>-->
         <item name="android:width">49dp</item>
         <item name="android:gravity">right</item>
     </style>
@@ -124,6 +124,11 @@
         <item name="android:background">@drawable/custom_button_black</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.AppTheme.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
 
 </resources>

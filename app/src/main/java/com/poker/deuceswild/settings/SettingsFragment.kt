@@ -40,13 +40,20 @@ class SettingsFragment : PreferenceFragmentCompat() {
             Toast.makeText(requireContext(),"Reset statistics", Toast.LENGTH_LONG).show()
             true
         }
-//
-//        val shareStats: Preference? = findPreference(SettingsUtils.Keys.SHARE_STATS)
-//        shareStats?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-//            StatisticsManager.shareStatistics(requireContext())
-//            Toast.makeText(requireContext(),"Share stats", Toast.LENGTH_LONG).show()
-//            true
-//        }
+
+        val shareStats: Preference? = findPreference(SettingsUtils.Keys.SHARE_STATS)
+        shareStats?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            LogManager.shareStatistics(requireContext())
+            Toast.makeText(requireContext(),"Share stats", Toast.LENGTH_LONG).show()
+            true
+        }
+
+        val cardBack: Preference? = findPreference(SettingsUtils.Keys.CHOOSE_CARDBACK)
+        cardBack?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            SettingsUtils.showChangeCardBackDialog(requireContext())
+            Toast.makeText(requireContext(),"Cardback changed", Toast.LENGTH_LONG).show()
+            true
+        }
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }

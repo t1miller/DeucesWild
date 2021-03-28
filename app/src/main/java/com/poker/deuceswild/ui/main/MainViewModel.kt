@@ -132,10 +132,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         collect(money)
     }
 
-//    private fun getMoney() : Int {
-//        return totalMoney.value ?: SettingsUtils.getMoney(getApplication())
-//    }
-
     fun betOne() {
         bet.value = (bet.value ?: 0) % 5 + 1
     }

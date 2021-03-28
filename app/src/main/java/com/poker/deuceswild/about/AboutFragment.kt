@@ -51,7 +51,6 @@ class AboutFragment : Fragment() {
 
 
     companion object {
-
         val NAME = SettingsFragment::class.java.simpleName
     }
 }

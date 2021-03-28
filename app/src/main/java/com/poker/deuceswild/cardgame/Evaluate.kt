@@ -1,7 +1,6 @@
 
 package com.poker.deuceswild.cardgame
 
-import timber.log.Timber
 
 
 object Evaluate {

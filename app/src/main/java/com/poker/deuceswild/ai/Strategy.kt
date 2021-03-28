@@ -1,9 +1,7 @@
 package com.poker.deuceswild.ai
 
 import com.poker.deuceswild.cardgame.Card
-import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
-import timber.log.Timber
 
 object Strategy {
 
@@ -321,117 +319,5 @@ object Strategy {
 
         tipsRuledOut.add("no strategy :(")
         return StrategyResponse(cards, emptyList(),tipsRuledOut,"no strategy :(")
-    }
-}
-
-object StrategyTester {
-
-    enum class TestType{
-        STRAIGHT_FLUSH,
-        STRAIGHT,
-        INSIDE_STRAIGHT,
-        OUTSIDE_STRAIGHT,
-        FOUR_STRAIGHT_FLUSH,
-        FOUR_OF_A_KIND,
-        THREE_OF_A_KIND
-    }
-
-    var decisions = mutableListOf<Strategy.StrategyResponse>()
-
-    fun log(strategy: Strategy.StrategyResponse) {
-        decisions.add(strategy)
-    }
-
-    fun runSimulation(numTrials: Int = 1000){
-//        test(numTrials, TestType.FOUR_STRAIGHT_FLUSH)
-//        test(numTrials, TestType.INSIDE_STRAIGHT)
-        test(numTrials, TestType.OUTSIDE_STRAIGHT)
-    }
-
-    fun List<Strategy.StrategyResponse>.print() {
-        var prettyResponse = "====================================\n"
-        for (response in this){
-            prettyResponse += "\nfull cards: " + response.fullCards
-            prettyResponse += "\nwinning cards: " + response.winningCards
-            prettyResponse += "\neval: " + response.tip
-        }
-        prettyResponse += "====================================\n"
-        Timber.d(prettyResponse)
-    }
-
-    fun test(numTrials: Int, type: TestType){
-        when(type) {
-            TestType.STRAIGHT -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-                    if(Evaluate.isStraight(cards)){
-                        Timber.d("straight: $cards")
-                    }
-                }
-            }
-            TestType.STRAIGHT_FLUSH -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-                    if(Evaluate.isStraightFlush(cards)){
-                        Timber.d("straight flush: $cards")
-                    }
-                }
-            }
-            TestType.FOUR_STRAIGHT_FLUSH -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-                    val (winningCards, isFourToStraightFlush) = Evaluate.isFourToStraightFlush(cards)
-                    if(isFourToStraightFlush){
-                        Timber.d("4 to straight flush: $cards")
-                    }
-                }
-            }
-            TestType.OUTSIDE_STRAIGHT -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-
-                    val (_, isFourToStraight) = Evaluate.isFourToStraight(cards)
-                    val (_, isFourToInside) = Evaluate.isFourToInsideStraightAndDontNeedDeuce(cards)
-
-                    if(isFourToStraight && !isFourToInside){
-                        Timber.d("outside straight: $cards")
-                    }
-                }
-            }
-            TestType.INSIDE_STRAIGHT -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-                    val (winningCards, isFourToInside) = Evaluate.isFourToInsideStraightAndDontNeedDeuce(cards)
-                    if(isFourToInside){
-                        Timber.d("four to inside straight: $cards")
-                    }
-                }
-            }
-            TestType.FOUR_OF_A_KIND -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-                    val (winningCards, isFourofAkind) = Evaluate.isFourOfAKind(cards)
-                    if(isFourofAkind){
-                        Timber.d("four of a kind: $cards")
-                    }
-                }
-            }
-            TestType.THREE_OF_A_KIND -> {
-                for (i in 1..numTrials) {
-                    Deck.newDeck()
-                    val cards = Deck.draw5()
-                    val (winningCards, isThree) = Evaluate.isThreeOfAKind(cards)
-                    if(isThree){
-                        Timber.d("three of a kind: $cards")
-                    }
-                }
-            }
-        }
     }
 }

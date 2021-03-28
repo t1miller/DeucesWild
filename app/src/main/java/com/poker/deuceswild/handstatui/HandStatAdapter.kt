@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.poker.deuceswild.R
 import com.poker.deuceswild.cardgame.Card
-import com.poker.deuceswild.ui.main.CardUiUtils
+import com.poker.deuceswild.cardgame.ui.CardUiUtils
 
 
 class HandStatAdapter(private val context: Context, private val mStats: MutableList<HandStat>): RecyclerView.Adapter<HandStatAdapter.ViewHolder>() {

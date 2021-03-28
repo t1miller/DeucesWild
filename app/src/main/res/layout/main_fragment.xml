@@ -65,16 +65,26 @@
         app:layout_constraintTop_toBottomOf="@id/topText">
 
         <TextView
-            style="@style/TopTitleText"
+            style="@style/StrategyTitleText"
             android:id="@+id/strategyTitle"
             android:text="Strategy 0 deuces"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/helpStrategy"
+            />
+
+        <ImageView
+            android:id="@+id/helpStrategy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_help"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -101,16 +111,26 @@
         app:layout_constraintTop_toBottomOf="@id/topText">
 
         <TextView
-            style="@style/TopTitleText"
+            style="@style/StrategyTitleText"
             android:id="@+id/trainingText"
             android:text="Training Mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/helpTraining"
+            />
+
+        <ImageView
+            android:id="@+id/helpTraining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_help"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             style="@style/TextWhiteSmall"
@@ -764,19 +784,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/hand" />
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        app:layout_constraintTop_toBottomOf="@id/simulateView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="5dp"
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
+
+    <FrameLayout
+        android:id="@+id/ad_view_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="LARGE_BANNER"
-        ads:adUnitId="ca-app-pub-7137320034166109/4056911260">
-    </com.google.android.gms.ads.AdView>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

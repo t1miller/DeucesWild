@@ -1,4 +1,4 @@
-package com.poker.deuceswild.ui.main
+package com.poker.deuceswild.cardgame.ui
 
 import android.content.Context
 import android.view.View

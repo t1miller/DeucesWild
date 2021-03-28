@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.poker.deuceswild.R
 import com.poker.deuceswild.ai.AIDecision
 import com.poker.deuceswild.cardgame.Card
-import com.poker.deuceswild.ui.main.CardUiUtils
+import com.poker.deuceswild.cardgame.ui.CardUiUtils
 import timber.log.Timber
 
 object StatDialogUtils {

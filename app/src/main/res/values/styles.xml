@@ -54,6 +54,12 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="StrategyTitleText" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="WinningText" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/colorLightLightYellow</item>
         <item name="android:textStyle">bold</item>

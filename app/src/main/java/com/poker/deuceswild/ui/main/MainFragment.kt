@@ -15,8 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.poker.deuceswild.R
 import com.poker.deuceswild.StrategySuggestionRecyclerViewAdapter
 import com.poker.deuceswild.ai.AIDecision
@@ -24,11 +22,14 @@ import com.poker.deuceswild.ai.Strategy
 import com.poker.deuceswild.cardgame.Card
 import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
+import com.poker.deuceswild.cardgame.ui.AdHelper
+import com.poker.deuceswild.cardgame.ui.CardUiUtils
+import com.poker.deuceswild.cardgame.ui.PayTableUiUtils
+import com.poker.deuceswild.cardgame.ui.TipDialog
 import com.poker.deuceswild.handstatui.StatDialogUtils
 import com.poker.deuceswild.log.LogManager
 import com.poker.deuceswild.payout.PayTableManager
 import com.poker.deuceswild.payout.PayTableType
-import com.poker.deuceswild.settings.SettingsFragment
 import com.poker.deuceswild.settings.SettingsUtils
 import com.poker.deuceswild.sound.SoundManager
 import com.wajahatkarim3.easyflipview.EasyFlipView
@@ -37,7 +38,7 @@ import timber.log.Timber
 class MainFragment : Fragment() {
 
     companion object {
-        val NAME = SettingsFragment::class.java.simpleName
+        val NAME = MainFragment::class.java.simpleName
 
         fun newInstance() = MainFragment()
     }
@@ -56,8 +57,6 @@ class MainFragment : Fragment() {
     private var holdViews: MutableList<TextView> = mutableListOf()
 
     private var trainingHoldViews: MutableList<TextView> = mutableListOf()
-
-    private lateinit var adView: AdView
 
     private lateinit var dealButton: Button
 
@@ -154,8 +153,6 @@ class MainFragment : Fragment() {
         handStatsButton = view.findViewById(R.id.best)
         handStatsLayout = view.findViewById(R.id.simulateView)
         runButton = view.findViewById(R.id.simulate)
-        adView = view.findViewById(R.id.adView)
-        adView.loadAd(AdRequest.Builder().build())
         trainingView = view.findViewById(R.id.trainingView)
         training = view.findViewById(R.id.trainingMode)
         strategyView = view.findViewById(R.id.strategyView)
@@ -340,6 +337,15 @@ class MainFragment : Fragment() {
             }
         }
 
+        val helpTraining = view.findViewById<ImageView>(R.id.helpTraining)
+        helpTraining.setOnClickListener {
+            TipDialog.showDialog(requireContext(),getString(R.string.training_tip_title), getString(R.string.training_tip_desc) )
+        }
+        val helpStrategy = view.findViewById<ImageView>(R.id.helpStrategy)
+        helpStrategy.setOnClickListener {
+            TipDialog.showDialog(requireContext(),getString(R.string.strategy_tip_title), getString(R.string.strategy_tip_desc) )
+        }
+
         recyclerAdapter = StrategySuggestionRecyclerViewAdapter(strategyTips)
         with(recyclerView) {
             val linearLayout = LinearLayoutManager(context)
@@ -347,6 +353,8 @@ class MainFragment : Fragment() {
             layoutManager = linearLayout
             adapter = recyclerAdapter
         }
+
+        AdHelper.setupAd(requireActivity(),view,"ca-app-pub-7137320034166109/4056911260")
         return view
     }
 
@@ -425,6 +433,7 @@ class MainFragment : Fragment() {
                 showNormalButtonsUi()
                 updateTrainingViewStats()
                 flip(CardFlipState.FACE_DOWN, hand)
+                PayTableUiUtils.unblink(payTableLayout)
             }
             MainViewModel.GameState.DEAL -> {
                 flip(CardFlipState.FACE_UP, hand)
@@ -448,6 +457,7 @@ class MainFragment : Fragment() {
                 disableBetting()
                 hideTapToHold()
                 SoundManager.playSound(requireContext(),viewModel.eval.value?.first ?: Evaluate.Hand.NOTHING)
+                PayTableUiUtils.blinkRow(requireContext(), payTableLayout, viewModel.eval.value?.first?.ordinal)
             }
             MainViewModel.GameState.EVALUATE_NO_WIN -> {
                 flip(CardFlipState.FULL_FLIP, hand)

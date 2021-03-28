@@ -52,7 +52,8 @@ object SettingsUtils {
             R.drawable.card_back_olympics,
             R.drawable.card_back_pinstriped,
             R.drawable.card_back_red,
-            R.drawable.card_back_t_rex
+            R.drawable.card_back_t_rex,
+            R.drawable.cardback_empty
         )
     }
 

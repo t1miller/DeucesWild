@@ -9,10 +9,10 @@
 <!--        app:showAsAction="ifRoom"/>-->
 
 <!--    &lt;!&ndash; "Mark Favorite", should appear as action button if possible &ndash;&gt;-->
-<!--    <item-->
-<!--        android:id="@+id/stats"-->
-<!--        android:title="Statistics"-->
-<!--        app:showAsAction="never"/>-->
+    <item
+        android:id="@+id/stats"
+        android:title="@string/statistics"
+        app:showAsAction="never"/>
 
 
     <!-- Settings, should always be in the overflow -->

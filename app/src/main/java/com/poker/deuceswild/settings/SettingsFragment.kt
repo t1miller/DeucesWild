@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.poker.deuceswild.R
-import com.poker.deuceswild.log.LogManager
+import com.poker.deuceswild.cardgame.dialog.ResetMoneyDialog
+import com.poker.deuceswild.stats.StatisticsManager
 
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : PreferenceFragmentCompat(), ResetMoneyDialog.MoneyButton {
 
     companion object {
         val NAME = SettingsFragment::class.java.simpleName
@@ -29,21 +30,22 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         val resetMoneyButton: Preference? = findPreference(SettingsUtils.Keys.RESET_MONEY)
         resetMoneyButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            Toast.makeText(context, "Money reset to ${SettingsUtils.Defaults.MONEY}", Toast.LENGTH_LONG).show()
-            SettingsUtils.resetMoney(requireContext())
+//            Toast.makeText(context, "Money reset to ${SettingsUtils.Defaults.MONEY}", Toast.LENGTH_LONG).show()
+//            SettingsUtils.resetMoney(requireContext())
+            ResetMoneyDialog.showDialog(requireContext(), this)
             true
         }
 
         val resetStatsButton: Preference? = findPreference(SettingsUtils.Keys.RESET_STATS)
         resetStatsButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            LogManager.deleteStatisticsOnDisk()
+            StatisticsManager.deleteStatisticsOnDisk()
             Toast.makeText(requireContext(),"Reset statistics", Toast.LENGTH_LONG).show()
             true
         }
 
         val shareStats: Preference? = findPreference(SettingsUtils.Keys.SHARE_STATS)
         shareStats?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            LogManager.shareStatistics(requireContext())
+            StatisticsManager.shareStatistics(requireContext())
             Toast.makeText(requireContext(),"Share stats", Toast.LENGTH_LONG).show()
             true
         }
@@ -56,5 +58,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun setMoney(amount: Int) {
+        SettingsUtils.setMoney(amount, requireContext())
+        Toast.makeText(requireContext(),"Money set: $$amount", Toast.LENGTH_LONG).show()
     }
 }

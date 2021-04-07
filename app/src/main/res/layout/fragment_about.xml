@@ -1,128 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="?attr/fullscreenBackgroundColor"
-    android:theme="@style/ThemeOverlay.DeucesWild.FullscreenContainer"
-    tools:context=".about.AboutFragment">
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/AboutTitle"
+            android:id="@+id/threecard_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/app_name"
+            />
+
+        <TextView
+            style="@style/AboutDesc"
+            android:id="@+id/aboutLetItRide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_deuces_poker"
+            />
+
+        <TextView
+            style="@style/AboutTitle"
+            android:id="@+id/analysisTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_analysis_title"
+            />
+
+        <TextView
+            style="@style/AboutDesc"
+            android:id="@+id/about_analysis_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_analysis"
+            />
+
+        <TextView
+            style="@style/AboutTitle"
+            android:id="@+id/training"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_training_title"
+            />
+
+        <TextView
+            style="@style/AboutDesc"
+            android:id="@+id/training_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_training"
+            />
+
+
+        <TextView
+            style="@style/AboutTitle"
+            android:id="@+id/otherApps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/other_apps"
+            />
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/deuces_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:id="@+id/jacks"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/deuces_wild_title"
-                android:textColor="?attr/fullscreenTextColor"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                />
+                app:srcCompat="@drawable/jacks_ad_round" />
 
-            <TextView
-                style="@style/TextSubTitle"
-                android:id="@+id/fullscreen_content_parag"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/deuces_definition"
-                 />
+<!--            <ImageView-->
+<!--                android:id="@+id/deuces"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_margin="5dp"-->
+<!--                app:srcCompat="@drawable/deuces_ad" />-->
 
-            <TextView
-                android:id="@+id/analysis"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:id="@+id/pokerHandBuddy"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/about_analysis_title"
-                android:textColor="?attr/fullscreenTextColor"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                />
+                app:srcCompat="@drawable/poker_buddy_ad_round" />
 
-            <TextView
-                style="@style/TextSubTitle"
-                android:id="@+id/about_analysis_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/about_analysis"
-                />
 
-            <TextView
-                android:id="@+id/training"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:id="@+id/letItRide"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/about_training_title"
-                android:textColor="?attr/fullscreenTextColor"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                />
-
-            <TextView
-                style="@style/TextSubTitle"
-                android:id="@+id/training_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/about_training"
-                />
-
-
-            <TextView
-                android:id="@+id/feedback"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/about_feedback_title"
-                android:textColor="?attr/fullscreenTextColor"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                />
-
-            <TextView
-                style="@style/TextSubTitle"
-                android:id="@+id/feedback_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:gravity="start"
-                android:keepScreenOn="true"
-                android:text="@string/about_feedback"
-                />
-
-
-            <Button
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:id="@+id/emailButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Email Me" />
+                app:srcCompat="@drawable/let_it_ride_icon" />
 
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            style="@style/AboutTitle"
+            android:id="@+id/feedback"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_feedback_title"
+            />
+
+        <TextView
+            style="@style/AboutContent"
+            android:id="@+id/feedback_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="start"
+            android:keepScreenOn="true"
+            android:text="@string/about_feedback"
+            />
 
 
-</FrameLayout>
+        <Button
+            android:layout_marginBottom="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:id="@+id/emailButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/email_me" />
+
+    </LinearLayout>
+
+</ScrollView>

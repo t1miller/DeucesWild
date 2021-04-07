@@ -17,7 +17,7 @@ import timber.log.Timber
 object SettingsUtils {
 
     object Defaults{
-        const val MONEY = 4000
+        const val MONEY = 500
         const val SOUND = true
         const val SOUND_FLIP = true
         const val SOUND_WIN = true
@@ -122,9 +122,6 @@ object SettingsUtils {
         )
     }
 
-    fun resetMoney(context: Context) {
-        setMoney(Defaults.MONEY, context)
-    }
 
     fun getMoney(context: Context) : Int {
         val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

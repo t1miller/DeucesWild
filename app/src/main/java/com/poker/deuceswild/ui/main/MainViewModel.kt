@@ -9,8 +9,8 @@ import com.poker.deuceswild.ai.AIPlayer
 import com.poker.deuceswild.cardgame.Card
 import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
-import com.poker.deuceswild.log.Game
-import com.poker.deuceswild.log.LogManager
+import com.poker.deuceswild.stats.Game
+import com.poker.deuceswild.stats.StatisticsManager
 import com.poker.deuceswild.payout.PayTableManager
 import com.poker.deuceswild.settings.SettingsUtils
 import com.poker.deuceswild.sound.SoundManager
@@ -90,7 +90,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if(eval.value?.first == Evaluate.Hand.NOTHING){
             // user won nothing, collect and log
             val wonLost = PayTableManager.getPayOut(SettingsUtils.getPayoutTable(getApplication()),eval.value?.first, bet.value)
-            LogManager.addStatistic(Game(bet.value, wonLost, eval.value?.first?.readableName, originalHand, lastCardsKept, hand.value))
+            StatisticsManager.addStatistic(Game(bet.value, wonLost, eval.value?.first?.readableName, originalHand, lastCardsKept, hand.value))
             collect(wonLost)
             gameState.value = GameState.EVALUATE_NO_WIN
         } else {
@@ -101,11 +101,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun collect(wonLost: Int) {
         wonLoss.value = wonLost
         totalMoney.value = (totalMoney.value ?: 0) + wonLost
+        SettingsUtils.setMoney(totalMoney.value ?: SettingsUtils.Defaults.MONEY, getApplication())
     }
 
     fun collectNoBonus() {
         val wonLost = PayTableManager.getPayOut(SettingsUtils.getPayoutTable(getApplication()),eval.value?.first, bet.value)
-        LogManager.addStatistic(Game(bet.value, wonLost, eval.value?.first?.readableName, originalHand, lastCardsKept, hand.value))
+        StatisticsManager.addStatistic(Game(bet.value, wonLost, eval.value?.first?.readableName, originalHand, lastCardsKept, hand.value))
         collect(wonLost)
     }
 
@@ -128,7 +129,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
 
-        LogManager.addStatistic(Game(bet.value, money, eval.value?.first?.readableName, originalHand, lastCardsKept, handFinal))
+        StatisticsManager.addStatistic(Game(bet.value, money, eval.value?.first?.readableName, originalHand, lastCardsKept, handFinal))
         collect(money)
     }
 

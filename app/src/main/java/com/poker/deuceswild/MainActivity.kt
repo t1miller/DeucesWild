@@ -7,8 +7,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.google.android.gms.ads.MobileAds
 import com.poker.deuceswild.about.AboutFragment
-import com.poker.deuceswild.log.LogManager
+import com.poker.deuceswild.stats.StatisticsManager
 import com.poker.deuceswild.settings.SettingsFragment
+import com.poker.deuceswild.stats.StatsFragment
 import com.poker.deuceswild.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -29,12 +30,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         // save pending statistics (won, loss, etc) to disk
-        LogManager.readStatisticsFromDisk()
+        StatisticsManager.readStatisticsFromDisk()
         super.onStart()
     }
     override fun onPause() {
         // save pending statistics (won, loss, etc) to disk
-        LogManager.writeStatisticsToDisk()
+        StatisticsManager.writeStatisticsToDisk()
         super.onPause()
     }
 
@@ -45,11 +46,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-//        R.id.simulations -> {
-//            supportFragmentManager.beginTransaction().replace(R.id.container, SimulatorFragment(), SimulatorFragment.NAME).commitNow()
-//            true
-//        }
-
+        R.id.stats -> {
+            supportFragmentManager.beginTransaction().replace(R.id.container, StatsFragment.newInstance(), StatsFragment.NAME).commitNow()
+            true
+        }
         R.id.about -> {
             supportFragmentManager.beginTransaction().replace(R.id.container, AboutFragment(), AboutFragment.NAME).commitNow()
             true

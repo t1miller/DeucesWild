@@ -22,20 +22,22 @@ import com.poker.deuceswild.ai.Strategy
 import com.poker.deuceswild.cardgame.Card
 import com.poker.deuceswild.cardgame.Deck
 import com.poker.deuceswild.cardgame.Evaluate
+import com.poker.deuceswild.cardgame.dialog.ResetMoneyDialog
 import com.poker.deuceswild.cardgame.ui.AdHelper
 import com.poker.deuceswild.cardgame.ui.CardUiUtils
 import com.poker.deuceswild.cardgame.ui.PayTableUiUtils
 import com.poker.deuceswild.cardgame.ui.TipDialog
 import com.poker.deuceswild.handstatui.StatDialogUtils
-import com.poker.deuceswild.log.LogManager
+import com.poker.deuceswild.stats.StatisticsManager
 import com.poker.deuceswild.payout.PayTableManager
 import com.poker.deuceswild.payout.PayTableType
 import com.poker.deuceswild.settings.SettingsUtils
 import com.poker.deuceswild.sound.SoundManager
 import com.wajahatkarim3.easyflipview.EasyFlipView
 import timber.log.Timber
+import java.lang.Math.abs
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
 
     companion object {
         val NAME = MainFragment::class.java.simpleName
@@ -123,10 +125,6 @@ class MainFragment : Fragment() {
     private var strategyTips = mutableListOf<String>()
 
     private var aiDecision: AIDecision? = null
-
-//    private lateinit var bestEVText: TextView
-//
-//    private lateinit var currentEVText: TextView
 
     enum class CardFlipState {
         FACE_UP,
@@ -227,11 +225,15 @@ class MainFragment : Fragment() {
         }
 
         dealButton.setOnClickListener {
-            disableDealButtonUi()
+//            disableDealButtonUi()
 //            dismissTrainingModeScreenUi()
             when (viewModel.gameState.value) {
                 MainViewModel.GameState.START -> {
-                    viewModel.deal()
+                    if((viewModel.bet.value ?: 1) > (viewModel.totalMoney.value ?: 0)){
+                        ResetMoneyDialog.showDialog(requireContext(), this)
+                    } else {
+                        viewModel.deal()
+                    }
                 }
                 MainViewModel.GameState.DEAL -> {
                     viewModel.evaluateHand(getCardsToKeepBooleanArray(),getCardsToKeep())
@@ -247,16 +249,20 @@ class MainFragment : Fragment() {
                     viewModel.gameState.value = MainViewModel.GameState.START
                 }
                 MainViewModel.GameState.BONUS -> {
-                    // todo add some fun music for bonus mode
-                    viewModel.gameState.value = MainViewModel.GameState.START
+                    if((viewModel.bet.value ?: 1) > (viewModel.totalMoney.value ?: 0)){
+                        ResetMoneyDialog.showDialog(requireContext(), this)
+                    } else {
+                        viewModel.gameState.value = MainViewModel.GameState.START
 //                    CardUiUtils.showCardBacks(cardViews)
-                    CardUiUtils.makeCardsVisibile(cardViews)
-                    viewModel.deal()
-                    flip(CardFlipState.FULL_FLIP, viewModel.hand.value?.toList() ?: emptyList())
+                        CardUiUtils.makeCardsVisibile(cardViews)
+                        viewModel.deal()
+                        flip(CardFlipState.FULL_FLIP, viewModel.hand.value?.toList() ?: emptyList())
+                    }
                 }
                 else -> {}
             }
         }
+
 
         betMaxButton.setOnClickListener {
             SoundManager.playSound(requireActivity(), SoundManager.SoundType.INSERT_COIN)
@@ -407,13 +413,9 @@ class MainFragment : Fragment() {
 
         viewModel.aiDecision.observe(viewLifecycleOwner, Observer { decision ->
             aiDecision = decision
-//            val sortedHands = decision.sortedRankedHands
-//            if(autoHold.isChecked && viewModel.gameState.value == MainViewModel.GameState.DEAL) {
-//                CardUiUtils.highlightHeldCards(holdViews, viewModel.hand.value, sortedHands[0].first)
-//                SoundManager.playSound(requireActivity(), SoundManager.SoundType.CHIME)
-//            }
+
             enableHandStats()
-            enableDealButtonUi()
+//            enableDealButtonUi()
         })
     }
 
@@ -498,13 +500,13 @@ class MainFragment : Fragment() {
         strategyView.visibility = View.GONE
     }
 
-    private fun disableDealButtonUi() {
-        dealButton.isEnabled = false
-    }
+//    private fun disableDealButtonUi() {
+//        dealButton.isEnabled = false
+//    }
 
-    private fun enableDealButtonUi() {
-        dealButton.isEnabled = true
-    }
+//    private fun enableDealButtonUi() {
+//        dealButton.isEnabled = true
+//    }
 
     private fun disableBetting() {
         betOneButton.isEnabled = false
@@ -526,19 +528,19 @@ class MainFragment : Fragment() {
                 Timber.d("Training correct optimal = ${bestDecisionStrategy.winningCards.toMutableSet()} your = ${heldCards.toMutableSet()}")
                 trainingWrongText.visibility = View.INVISIBLE
                 trainingCorrectText.visibility = View.VISIBLE
-                LogManager.increaseCorrectCount()
-                LogManager.increaseOptimalWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
+                StatisticsManager.increaseCorrectCount()
+                StatisticsManager.increaseOptimalWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
             } else {
                 Timber.d("Training incorrect optimal = ${bestDecisionStrategy.winningCards.toMutableSet()} your = ${heldCards.toMutableSet()}")
                 Timber.d("optimal ranks: ${bestDecisionStrategy.winningCards.toMutableSet().joinToString { it.rank.toString() }} your ranks: ${heldCards.toMutableSet().joinToString { it.rank.toString() }}")
                 trainingWrongText.visibility = View.VISIBLE
                 trainingCorrectText.visibility = View.INVISIBLE
-                LogManager.increaseIncorrectCount()
+                StatisticsManager.increaseIncorrectCount()
                 val bestDecisionHand = Deck.draw5Random(bestDecisionStrategy.winningCards.toMutableList())
                 val bestDecisionEval = Evaluate.evaluate(bestDecisionHand)
-                LogManager.increaseOptimalWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),bestDecisionEval.first,1))
+                StatisticsManager.increaseOptimalWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),bestDecisionEval.first,1))
             }
-            LogManager.increaseTrainingWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
+            StatisticsManager.increaseTrainingWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
 
             CardUiUtils.highlightHeldCards(trainingHoldViews, bestDecisionStrategy.fullCards, bestDecisionStrategy.winningCards)
             CardUiUtils.showCards(requireContext(), trainingCardViews, bestDecisionStrategy.fullCards)
@@ -547,11 +549,11 @@ class MainFragment : Fragment() {
     }
 
     private fun updateTrainingViewStats() {
-        val stats = LogManager.getStatistics()
+        val stats = StatisticsManager.getStatistics()
         trainingCorrectCountText.text = getString(R.string.correct_training, stats?.correctCount ?: 0)
         trainingWrongCountText.text = getString(R.string.wrong_training, stats?.wrongCount ?: 0)
         stats?.let {
-            accuracyText.text = getString(R.string.accuracy, LogManager.getAccuracy())
+            accuracyText.text = getString(R.string.accuracy, StatisticsManager.getAccuracy())
             winningsText.text = getString(R.string.winnings, stats.trainingWonLoss)
             optimalText.text = getString(R.string.optimal, stats.trainingOptimalWonLoss)
         }
@@ -593,7 +595,7 @@ class MainFragment : Fragment() {
 
     private fun updateWinLossUi(money: Int){
         if(money < 0){
-            wonLossText.text = getString(R.string.loss, money)
+            wonLossText.text = getString(R.string.loss, abs(money))
         } else {
             wonLossText.text = getString(R.string.won, money)
         }
@@ -786,7 +788,7 @@ class MainFragment : Fragment() {
                     cardLayouts[i].isAutoFlipBack = false
                     cardLayouts[i].flipTheView()
                     cardLayouts[i].setOnFlipListener { _, _ ->
-                        enableDealButtonUi()
+//                        enableDealButtonUi()
                     }
                 }
             }
@@ -796,13 +798,13 @@ class MainFragment : Fragment() {
                     cardViews[i].setImageResource(CardUiUtils.cardToImage(requireContext(),cards[i]))
                     cardLayouts[i].flipTheView()
                     cardLayouts[i].setOnFlipListener { _, _ ->
-                        enableDealButtonUi()
+//                        enableDealButtonUi()
                     }
 //                    }
                 }
             }
             CardFlipState.FULL_FLIP -> {
-                if(getCardsToKeepBooleanArray().filter { it }.size == 5) enableDealButtonUi()
+//                if(getCardsToKeepBooleanArray().filter { it }.size == 5) enableDealButtonUi()
                 for (i in 0..4) {
                     cardLayouts[i].isAutoFlipBack = true
                     if (!getCardsToKeepBooleanArray()[i]) {
@@ -812,11 +814,17 @@ class MainFragment : Fragment() {
                             if (newCurrentSide == EasyFlipView.FlipState.BACK_SIDE) {
                                 cardViews[i].setImageResource(CardUiUtils.cardToImage(requireContext(),cards[i]))
                             }
-                            enableDealButtonUi()
+//                            enableDealButtonUi()
                         }
                     }
                 }
             }
         }
+    }
+
+    override fun setMoney(amount: Int) {
+        viewModel.totalMoney.value = amount
+        SettingsUtils.setMoney(amount, requireContext())
+        Toast.makeText(requireContext(),"Money set: $$amount", Toast.LENGTH_LONG).show()
     }
 }

@@ -52,8 +52,8 @@ class Card(var rank: Int, var suit: Char) {
 
     @Override
     override fun toString(): String {
-        val tempRank =  if (rank == 1) 14 else rank
-        return "${RANK.toCharArray()[tempRank-2]}${suit}"
+        if(rank < 2 || rank > 14) return ""
+        return "${RANK.toCharArray()[rank-2]}${suit}"
     }
 
     @Override

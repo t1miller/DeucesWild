@@ -25,6 +25,8 @@
     <color name="colorTurquoise">#aa00292a</color>
     <color name="colorPurple">#b19cd9</color>
     <color name="colorLightLightYellow">#fffdaf</color>
+    <color name="lightGrey">#616161</color>
+    <color name="lightLightGrey">#DADADA</color>
 
     <!--    background -->
     <color name="colorBackground1">#1f417e</color>

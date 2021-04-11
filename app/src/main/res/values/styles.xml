@@ -179,4 +179,10 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="TipTextSmall" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>

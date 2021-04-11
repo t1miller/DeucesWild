@@ -9,6 +9,7 @@ import com.google.android.gms.ads.MobileAds
 import com.poker.deuceswild.about.AboutFragment
 import com.poker.deuceswild.stats.StatisticsManager
 import com.poker.deuceswild.settings.SettingsFragment
+import com.poker.deuceswild.simulator.SimulatorFragment
 import com.poker.deuceswild.stats.StatsFragment
 import com.poker.deuceswild.ui.main.MainFragment
 
@@ -46,6 +47,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.simulations -> {
+            supportFragmentManager.beginTransaction().replace(R.id.container, SimulatorFragment.newInstance(), SimulatorFragment.NAME).commitNow()
+            true
+        }
         R.id.stats -> {
             supportFragmentManager.beginTransaction().replace(R.id.container, StatsFragment.newInstance(), StatsFragment.NAME).commitNow()
             true

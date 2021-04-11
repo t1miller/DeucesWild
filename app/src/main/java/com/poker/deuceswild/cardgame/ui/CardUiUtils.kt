@@ -1,28 +1,39 @@
 package com.poker.deuceswild.cardgame.ui
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import com.poker.deuceswild.PokerApplication
 import com.poker.deuceswild.R
 import com.poker.deuceswild.cardgame.Card
 import com.poker.deuceswild.settings.SettingsUtils
 
-
 object CardUiUtils {
 
-    fun showCards(context: Context, cardViews: List<ImageView>?, fullHand: List<Card>?) {
-        fullHand?.forEachIndexed { index, card ->
-            cardViews?.get(index)?.setImageResource(cardToImage(context,card))
-            cardViews?.get(index)?.setBackgroundResource(0)
+    fun tintCards(cardViews: List<ImageView>?, fullHand: List<Card>?, cardsToTint: List<Card>) {
+        fullHand?.forEachIndexed { index, c ->
+            if (c in cardsToTint) {
+                cardViews?.get(index)?.setColorFilter(ContextCompat.getColor(PokerApplication.applicationContext(), R.color.colorGrey), android.graphics.PorterDuff.Mode.MULTIPLY)
+            }
         }
     }
 
-    fun showCardBacks(context: Context, cardViews: List<ImageView>?) {
+    fun unTintCards(cardViews: List<ImageView>?, fullHand: List<Card>?) {
+        fullHand?.forEachIndexed { index, _ ->
+            cardViews?.get(index)?.colorFilter = null
+        }
+    }
+
+    fun showCards(cardViews: List<ImageView>?, fullHand: List<Card>?) {
+        fullHand?.forEachIndexed { index, card ->
+            cardViews?.get(index)?.setImageResource(cardToImage(card))
+        }
+    }
+
+    fun showCardBacks(cardViews: List<ImageView>?) {
         cardViews?.forEach {
-            val cardback = SettingsUtils.getCardBack(context)
-            it.setImageResource(cardback)
-            it.setBackgroundResource(cardback)
+            it.setImageResource(SettingsUtils.getCardBack(PokerApplication.applicationContext()))
         }
     }
 
@@ -32,15 +43,16 @@ object CardUiUtils {
         }
     }
 
-    fun highlightHeldCards(holdsViews: List<TextView>, fullHand: List<Card>?, heldHand: List<Card>) {
-        if(fullHand == null) return
-        for (i in 0..4){
-            if(fullHand[i] in heldHand){
-                holdsViews[i].visibility = View.VISIBLE
-            } else {
-                holdsViews[i].visibility = View.INVISIBLE
+    fun highlightHeldCards(holdsViews: List<TextView>?, fullHand: List<Card>?, heldHand: List<Card>?) {
+        fullHand?.forEachIndexed { index, card ->
+            if(heldHand?.contains(card) == true){
+                holdsViews?.get(index)?.visibility = View.VISIBLE
             }
         }
+    }
+
+    fun unhighlightHeldCards(holdsViews: List<TextView>?) {
+        holdsViews?.forEach { it.visibility = View.INVISIBLE }
     }
 
     fun toggleHighlightHeldCards(holdsViews: List<TextView>?, cardIndex: Int) {
@@ -48,33 +60,9 @@ object CardUiUtils {
         view?.visibility = if(view?.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
     }
 
-    fun unhighlightHeldCards(holdsViews: List<TextView>?) {
-        holdsViews?.forEach { it.visibility = View.INVISIBLE }
-    }
-
-    fun cardToImage(context: Context, card: Card?) : Int{
-//        Timber.d("${card?.rank}")
-        if(card == null) return SettingsUtils.getCardBack(context)
+    fun cardToImage(card: Card?) : Int{
+        if(card == null) return R.drawable.card_back_default
         return when(card.rank) {
-            1 -> {
-                when(card.suit) {
-                    's' -> {
-                        R.drawable.ace_of_spades2
-                    }
-                    'h' -> {
-                        R.drawable.ace_of_hearts
-                    }
-                    'd' -> {
-                        R.drawable.ace_of_diamonds
-                    }
-                    'c' -> {
-                        R.drawable.ace_of_clubs
-                    }
-                    else -> {
-                        SettingsUtils.getCardBack(context)
-                    }
-                }
-            }
             2 -> {
                 when(card.suit) {
                     's' -> {
@@ -89,7 +77,9 @@ object CardUiUtils {
                     'c' -> {
                         R.drawable.two_of_clubs
                     }
-                    else -> SettingsUtils.getCardBack(context)
+                    else -> {
+                        -1
+                    }
                 }
             }
             3 -> {
@@ -107,7 +97,7 @@ object CardUiUtils {
                         R.drawable.three_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -126,7 +116,7 @@ object CardUiUtils {
                         R.drawable.four_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -145,7 +135,7 @@ object CardUiUtils {
                         R.drawable.five_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -164,7 +154,7 @@ object CardUiUtils {
                         R.drawable.six_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -183,7 +173,7 @@ object CardUiUtils {
                         R.drawable.seven_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -202,7 +192,7 @@ object CardUiUtils {
                         R.drawable.eight_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -221,7 +211,7 @@ object CardUiUtils {
                         R.drawable.nine_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
@@ -240,71 +230,71 @@ object CardUiUtils {
                         R.drawable.ten_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
             11 -> {
                 when(card.suit) {
                     's' -> {
-                        R.drawable.jack_of_spades2
+                        R.drawable.jack_of_spades
                     }
                     'h' -> {
-                        R.drawable.jack_of_hearts2
+                        R.drawable.jack_of_hearts
                     }
                     'd' -> {
-                        R.drawable.jack_of_diamonds2
+                        R.drawable.jack_of_diamonds
                     }
                     'c' -> {
-                        R.drawable.jack_of_clubs2
+                        R.drawable.jack_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
             12 -> {
                 when(card.suit) {
                     's' -> {
-                        R.drawable.queen_of_spades2
+                        R.drawable.queen_of_spades
                     }
                     'h' -> {
-                        R.drawable.queen_of_hearts2
+                        R.drawable.queen_of_hearts
                     }
                     'd' -> {
-                        R.drawable.queen_of_diamonds2
+                        R.drawable.queen_of_diamonds
                     }
                     'c' -> {
-                        R.drawable.queen_of_clubs2
+                        R.drawable.queen_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
             13 -> {
                 when(card.suit) {
                     's' -> {
-                        R.drawable.king_of_spades2
+                        R.drawable.king_of_spades
                     }
                     'h' -> {
-                        R.drawable.king_of_hearts2
+                        R.drawable.king_of_hearts
                     }
                     'd' -> {
-                        R.drawable.king_of_diamonds2
+                        R.drawable.king_of_diamonds
                     }
                     'c' -> {
-                        R.drawable.king_of_clubs2
+                        R.drawable.king_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
             14 -> {
                 when(card.suit) {
                     's' -> {
-                        R.drawable.ace_of_spades2
+                        R.drawable.ace_of_spades
                     }
                     'h' -> {
                         R.drawable.ace_of_hearts
@@ -316,14 +306,68 @@ object CardUiUtils {
                         R.drawable.ace_of_clubs
                     }
                     else -> {
-                        SettingsUtils.getCardBack(context)
+                        -1
                     }
                 }
             }
             else -> {
-                SettingsUtils.getCardBack(context)
+                SettingsUtils.getCardBack(PokerApplication.applicationContext())
             }
         }
-
     }
 }
+
+//package com.poker.deuceswild.cardgame.ui
+//
+//import android.content.Context
+//import android.view.View
+//import android.widget.ImageView
+//import android.widget.TextView
+//import com.poker.deuceswild.R
+//import com.poker.deuceswild.cardgame.Card
+//import com.poker.deuceswild.settings.SettingsUtils
+//
+//
+//object CardUiUtils {
+//
+//    fun showCards(context: Context, cardViews: List<ImageView>?, fullHand: List<Card>?) {
+//        fullHand?.forEachIndexed { index, card ->
+//            cardViews?.get(index)?.setImageResource(cardToImage(context,card))
+//            cardViews?.get(index)?.setBackgroundResource(0)
+//        }
+//    }
+//
+//    fun showCardBacks(context: Context, cardViews: List<ImageView>?) {
+//        cardViews?.forEach {
+//            val cardback = SettingsUtils.getCardBack(context)
+//            it.setImageResource(cardback)
+//            it.setBackgroundResource(cardback)
+//        }
+//    }
+//
+//    fun makeCardsVisibile(cardViews: List<ImageView>?) {
+//        cardViews?.forEach {
+//            it.visibility = View.VISIBLE
+//        }
+//    }
+//
+//    fun highlightHeldCards(holdsViews: List<TextView>, fullHand: List<Card>?, heldHand: List<Card>) {
+//        if(fullHand == null) return
+//        for (i in 0..4){
+//            if(fullHand[i] in heldHand){
+//                holdsViews[i].visibility = View.VISIBLE
+//            } else {
+//                holdsViews[i].visibility = View.INVISIBLE
+//            }
+//        }
+//    }
+//
+//    fun toggleHighlightHeldCards(holdsViews: List<TextView>?, cardIndex: Int) {
+//        val view = holdsViews?.get(cardIndex)
+//        view?.visibility = if(view?.visibility == View.INVISIBLE) View.VISIBLE else View.INVISIBLE
+//    }
+//
+//    fun unhighlightHeldCards(holdsViews: List<TextView>?) {
+//        holdsViews?.forEach { it.visibility = View.INVISIBLE }
+//    }
+//

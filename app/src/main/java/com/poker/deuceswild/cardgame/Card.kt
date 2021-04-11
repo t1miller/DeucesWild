@@ -1,8 +1,11 @@
 package com.poker.deuceswild.cardgame
 
+import timber.log.Timber
 import java.util.*
 
 class Card(var rank: Int, var suit: Char) {
+
+    constructor() : this(-1,'s')
 
     enum class ParseError(val humanReadableError: String) {
         NOT_5_CARDS("Need a 5 card hand"),
@@ -53,7 +56,11 @@ class Card(var rank: Int, var suit: Char) {
     @Override
     override fun toString(): String {
         if(rank < 2 || rank > 14) return ""
-        return "${RANK.toCharArray()[rank-2]}${suit}"
+        return try {
+            "${RANK.toCharArray()[rank - 2]}${suit}"
+        } catch (e: Exception){
+            ""
+        }
     }
 
     @Override

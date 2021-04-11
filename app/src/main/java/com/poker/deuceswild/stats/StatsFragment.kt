@@ -78,9 +78,9 @@ class StatsFragment : Fragment() {
         cardHeldViews.add(view.findViewById(R.id.card5Hold))
 
         // set last game stats
-        CardUiUtils.showCards(requireContext(), cardViewsOriginal, StatisticsManager.getStatistics()?.lastGame?.handOriginal)
+        CardUiUtils.showCards(cardViewsOriginal, StatisticsManager.getStatistics()?.lastGame?.handOriginal)
         CardUiUtils.highlightHeldCards(cardHeldViews, StatisticsManager.getStatistics()?.lastGame?.handOriginal, StatisticsManager.getStatistics()?.lastGame?.heldCards ?: emptyList())
-        CardUiUtils.showCards(requireContext(), cardViewsAfterDiscard, StatisticsManager.getStatistics()?.lastGame?.handFinal)
+        CardUiUtils.showCards(cardViewsAfterDiscard, StatisticsManager.getStatistics()?.lastGame?.handFinal)
         lastHandBet.text = getString(R.string.bet,StatisticsManager.getStatistics()?.lastGame?.bet ?: 0)
         lastHandEval.text = getString(R.string.eval,StatisticsManager.getStatistics()?.lastGame?.eval ?: "")
         if(StatisticsManager.getStatistics()?.lastGame?.won ?: 0 >= 0){

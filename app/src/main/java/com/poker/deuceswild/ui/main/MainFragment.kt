@@ -339,8 +339,13 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
                 Toast.makeText(requireContext(), "Deal first", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "Running simulations", Toast.LENGTH_LONG).show()
-                viewModel.getBestHand()
+                viewModel.getBestHand(viewModel.hand.value)
             }
+        }
+
+        val reset = view.findViewById<TextView>(R.id.totalMoneyReset)
+        reset.setOnClickListener {
+            ResetMoneyDialog.showDialog(requireContext(), this)
         }
 
         val helpTraining = view.findViewById<ImageView>(R.id.helpTraining)
@@ -472,6 +477,7 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
                 showRedAndBlack()
                 CardUiUtils.unhighlightHeldCards(holdViews)
                 clearWinningTextUi()
+                clearWinningCardsUi()
             }
         }
     }
@@ -543,7 +549,7 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
             StatisticsManager.increaseTrainingWonLoss(PayTableManager.getPayOut(SettingsUtils.getPayoutTable(requireContext()),viewModel.eval.value?.first,1))
 
             CardUiUtils.highlightHeldCards(trainingHoldViews, bestDecisionStrategy.fullCards, bestDecisionStrategy.winningCards)
-            CardUiUtils.showCards(requireContext(), trainingCardViews, bestDecisionStrategy.fullCards)
+            CardUiUtils.showCards(trainingCardViews, bestDecisionStrategy.fullCards)
             updateTrainingViewStats()
         }
     }
@@ -554,14 +560,23 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
         trainingWrongCountText.text = getString(R.string.wrong_training, stats?.wrongCount ?: 0)
         stats?.let {
             accuracyText.text = getString(R.string.accuracy, StatisticsManager.getAccuracy())
-            winningsText.text = getString(R.string.winnings, stats.trainingWonLoss)
-            optimalText.text = getString(R.string.optimal, stats.trainingOptimalWonLoss)
-        }
 
+            if(stats.trainingWonLoss >= 0) {
+                winningsText.text = getString(R.string.winnings_pos, stats.trainingWonLoss)
+            } else {
+                winningsText.text = getString(R.string.winnings_neg, abs(stats.trainingWonLoss))
+            }
+
+            if(stats.trainingOptimalWonLoss >= 0) {
+                optimalText.text = getString(R.string.optimal_pos, stats.trainingOptimalWonLoss)
+            } else {
+                optimalText.text = getString(R.string.optimal_neg, abs(stats.trainingOptimalWonLoss))
+            }
+        }
     }
 
     private fun clearTrainingView() {
-        CardUiUtils.showCardBacks(requireContext(),trainingCardViews)
+        CardUiUtils.showCardBacks(trainingCardViews)
         CardUiUtils.unhighlightHeldCards(trainingHoldViews)
         trainingWrongText.visibility = View.INVISIBLE
         trainingCorrectText.visibility = View.INVISIBLE
@@ -662,7 +677,7 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
         bonusButtonsLayout.visibility = View.VISIBLE
         gameInstructions.visibility = View.VISIBLE
         gameInstructions.text = getString(R.string.guess_the_color)
-        CardUiUtils.showCardBacks(requireContext(),cardViews)
+        CardUiUtils.showCardBacks(cardViews)
         cardLayouts[2].isAutoFlipBack = false
         cardLayouts[2].flipTheView()
         for(i in 0..4){
@@ -673,7 +688,7 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
     }
 
     private fun showBonusDoneUi() {
-        cardViews[2].setImageResource(CardUiUtils.cardToImage(requireContext(),viewModel.hand.value?.get(2)))
+        cardViews[2].setImageResource(CardUiUtils.cardToImage(viewModel.hand.value?.get(2)))
         cardLayouts[2].flipTheView()
 
         if (viewModel.wonLoss.value ?: 0 > 0) {
@@ -795,7 +810,7 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
             CardFlipState.FACE_UP -> {
                 for (i in 0..4) {
                     cardLayouts[i].isAutoFlipBack = false
-                    cardViews[i].setImageResource(CardUiUtils.cardToImage(requireContext(),cards[i]))
+                    cardViews[i].setImageResource(CardUiUtils.cardToImage(cards[i]))
                     cardLayouts[i].flipTheView()
                     cardLayouts[i].setOnFlipListener { _, _ ->
 //                        enableDealButtonUi()
@@ -812,7 +827,7 @@ class MainFragment : Fragment(), ResetMoneyDialog.MoneyButton {
                         cardLayouts[i].flipTheView()
                         cardLayouts[i].setOnFlipListener { _, newCurrentSide ->
                             if (newCurrentSide == EasyFlipView.FlipState.BACK_SIDE) {
-                                cardViews[i].setImageResource(CardUiUtils.cardToImage(requireContext(),cards[i]))
+                                cardViews[i].setImageResource(CardUiUtils.cardToImage(cards[i]))
                             }
 //                            enableDealButtonUi()
                         }

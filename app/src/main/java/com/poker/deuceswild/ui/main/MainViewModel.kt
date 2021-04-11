@@ -1,6 +1,7 @@
 package com.poker.deuceswild.ui.main
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -67,7 +68,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         Deck.newDeck()
         hand.value = Deck.draw5()
         gameState.value = GameState.DEAL
-        getBestHand(2000)
+        getBestHand(hand.value, 2000)
     }
 
     fun evaluateHand(cardsToKeep: BooleanArray, cards: List<Card>) {
@@ -141,20 +142,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         bet.value = 5
     }
 
-    fun getBestHand(numTrials: Int=4000) {
+    fun getBestHand(cards: List<Card>?, numTrials: Int=4000) {
         viewModelScope.launch {
-            runGetBestHand(numTrials)
+            runGetBestHand(cards, numTrials)
         }
     }
 
-    private suspend fun runGetBestHand(numTrials: Int) {
+    private suspend fun runGetBestHand(cards: List<Card>?, numTrials: Int) {
+        if(cards == null || cards.size < 5){
+            Toast.makeText(getApplication(), "Need 5 cards for simulation", Toast.LENGTH_LONG).show()
+            aiDecision.postValue(null)
+            return
+        }
         withContext(Dispatchers.IO) {
-            hand.value?.let {
-                val timeInMillis = measureTimeMillis {
-                    aiDecision.postValue(AIPlayer.calculateBestHands(getApplication(), bet.value ?: DEFAULT_BET,it, numTrials))
-                }
-                Timber.d("MonteCarlo simulation took $timeInMillis ms")
+            Timber.d("Running simulation")
+            val timeInMillis = measureTimeMillis {
+                aiDecision.postValue(AIPlayer.calculateBestHands(getApplication(), bet.value ?: DEFAULT_BET,cards, numTrials))
             }
+            Timber.d("MonteCarlo simulation took $timeInMillis ms")
         }
     }
 
